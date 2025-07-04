@@ -1,11 +1,11 @@
 [project]
 name = "resume-automation"
-version = "0.1.0-alpha.2"
+version = "0.1.0-alpha.3"
 description = "Python-based resume conversion pipeline that transforms Markdown-formatted resumes into multiple ATS-optimized formats"
 readme = "README.md"
 requires-python = ">=3.12"
 authors = [
-    { name = "Resume Automation Team", email = "team@resume-automation.com" },
+    { name = "Resume Automation Team", email = "computerscience@vinny-van-gogh.com" },
 ]
 keywords = [
     "resume",

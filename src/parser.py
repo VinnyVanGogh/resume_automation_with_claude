@@ -51,7 +51,7 @@ class ATSRenderer:
             ResumeSection: Parsed section data
         """
         # TODO: Implement section parsing logic
-        pass
+        raise NotImplementedError("Section parsing not yet implemented")
 
 
 class MarkdownResumeParser:
@@ -82,4 +82,4 @@ class MarkdownResumeParser:
             InvalidMarkdownError: If markdown structure is invalid
         """
         # TODO: Implement parsing logic
-        pass
+        raise NotImplementedError("Resume parsing not yet implemented")

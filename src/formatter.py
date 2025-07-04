@@ -41,7 +41,7 @@ class ATSFormatter:
         # - Standardize headers
         # - Format dates consistently
         # - Ensure bullet points
-        pass
+        raise NotImplementedError("Section formatting not yet implemented")
 
     def format_all(
         self, sections: dict[str, ResumeSection]
@@ -71,7 +71,7 @@ class ATSFormatter:
             ResumeSection: Section with standardized header
         """
         # TODO: Implement header standardization
-        pass
+        raise NotImplementedError("Header standardization not yet implemented")
 
     def format_dates(self, section: ResumeSection) -> ResumeSection:
         """
@@ -84,4 +84,4 @@ class ATSFormatter:
             ResumeSection: Section with formatted dates
         """
         # TODO: Implement date formatting
-        pass
+        raise NotImplementedError("Date formatting not yet implemented")
