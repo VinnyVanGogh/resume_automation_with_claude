@@ -54,12 +54,12 @@ class TestMarkdownResumeParser:
         assert hasattr(parser, 'renderer')
         assert hasattr(parser, 'markdown')
     
-    @pytest.mark.skip(reason="Implementation pending")
     def test_parse_simple_resume(self):
         """Test parsing a simple markdown resume."""
         parser = MarkdownResumeParser()
         sample_markdown = """
 # John Smith
+john.smith@email.com | (555) 123-4567
 
 ## Experience
 
@@ -68,5 +68,12 @@ class TestMarkdownResumeParser:
 - Worked with Python and JavaScript
 """
         result = parser.parse(sample_markdown)
-        # TODO: Add assertions once parse method is implemented
+        
+        # Check that we get a ResumeData object
         assert result is not None
+        assert hasattr(result, 'contact')
+        assert hasattr(result, 'experience')
+        assert hasattr(result, 'education')
+        
+        # Check basic contact info parsing
+        assert result.contact.name == "John Smith"

@@ -239,7 +239,4 @@ class ResumeData(BaseModel):
             sections.extend(self.additional_sections.keys())
         return sections
 
-    class Config:
-        """Pydantic config."""
-
-        json_encoders = {HttpUrl: str}
+    model_config = {"json_encoders": {HttpUrl: str}}
