@@ -13,6 +13,7 @@ import mistune
 
 from .models import ResumeData, ContactInfo, Experience, Education, Skills, SkillCategory
 from .types import InvalidMarkdownError
+from .validation import ResumeValidator
 
 
 @dataclass
@@ -223,25 +224,42 @@ class MarkdownResumeParser:
     into structured ResumeData objects for further processing.
     """
 
-    def __init__(self) -> None:
-        """Initialize the markdown parser with ATS renderer."""
+    def __init__(self, validate_input: bool = True, strict_validation: bool = False) -> None:
+        """
+        Initialize the markdown parser with ATS renderer.
+
+        Args:
+            validate_input: Whether to validate markdown structure before parsing
+            strict_validation: Enable strict validation rules
+        """
         self.renderer = ATSRenderer()
         self.markdown = mistune.create_markdown(renderer=self.renderer)
+        self.validator = ResumeValidator(strict_mode=strict_validation)
+        self.validate_input = validate_input
 
-    def parse(self, markdown_content: str) -> ResumeData:
+    def parse(self, markdown_content: str, validate_result: bool = True) -> ResumeData:
         """
         Parse markdown content into structured resume data.
 
         Args:
             markdown_content: Raw markdown content of the resume
+            validate_result: Whether to validate the parsed result
 
         Returns:
             ResumeData: Structured resume data model
 
         Raises:
-            InvalidMarkdownError: If markdown structure is invalid
+            InvalidMarkdownError: If markdown structure is invalid or validation fails
         """
         try:
+            # Validate input markdown structure if enabled
+            if self.validate_input:
+                structure_validation = self.validator.validate_markdown_structure(markdown_content)
+                if not structure_validation.valid:
+                    raise InvalidMarkdownError(
+                        f"Invalid markdown structure: {'; '.join(structure_validation.errors)}"
+                    )
+            
             # Parse markdown content
             self.markdown(markdown_content)
             sections = self.renderer.finalize_sections()
@@ -255,14 +273,58 @@ class MarkdownResumeParser:
             skills = self._extract_skills(sections)
             summary = self._extract_summary(sections)
             
-            # Create and return ResumeData
-            return ResumeData(
+            # Create ResumeData
+            resume_data = ResumeData(
                 contact=contact_info,
                 summary=summary,
                 experience=experience,
                 education=education,
                 skills=skills
             )
+            
+            # Validate the parsed result if enabled
+            if validate_result:
+                validation_result = self.validator.validate_resume(resume_data)
+                if not validation_result.valid:
+                    raise InvalidMarkdownError(
+                        f"Resume validation failed: {'; '.join(validation_result.errors)}"
+                    )
+            
+            return resume_data
+            
+        except InvalidMarkdownError:
+            # Re-raise validation errors as-is
+            raise
+        except Exception as e:
+            raise InvalidMarkdownError(f"Failed to parse markdown resume: {str(e)}") from e
+
+    def parse_with_warnings(self, markdown_content: str) -> tuple[ResumeData, List[str]]:
+        """
+        Parse markdown content and return both data and validation warnings.
+
+        Args:
+            markdown_content: Raw markdown content of the resume
+
+        Returns:
+            tuple: (ResumeData, list of warning messages)
+
+        Raises:
+            InvalidMarkdownError: If parsing fails or critical validation errors occur
+        """
+        try:
+            # Parse without result validation first
+            resume_data = self.parse(markdown_content, validate_result=False)
+            
+            # Get full validation results including warnings
+            validation_result = self.validator.validate_resume(resume_data)
+            
+            # Check for critical errors
+            if not validation_result.valid:
+                raise InvalidMarkdownError(
+                    f"Resume validation failed: {'; '.join(validation_result.errors)}"
+                )
+            
+            return resume_data, validation_result.warnings or []
             
         except Exception as e:
             raise InvalidMarkdownError(f"Failed to parse markdown resume: {str(e)}") from e
