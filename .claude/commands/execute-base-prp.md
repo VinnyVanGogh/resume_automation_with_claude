@@ -6,7 +6,7 @@ Implement a feature using using the PRP file.
 
 ## Execution Process
 
-1. **Load PRP**
+1. **Load PRP** $ARGUMENTS
    - Read the specified PRP file
    - Understand all context and requirements
    - Follow all instructions in the PRP and extend the research if needed

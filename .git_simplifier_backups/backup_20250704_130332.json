@@ -1,0 +1,92 @@
+{
+  "timestamp": "2025-07-04T13:03:32.263542",
+  "current_branch": "main",
+  "commit_hash": "a68896d8dae5722f4e08903400f387582ce2ad79",
+  "tags": [],
+  "uncommitted_changes": {
+    "staged_files": [
+      {
+        "status": "M",
+        "file": ".claude/commands/execute-base-prp.md"
+      },
+      {
+        "status": "R100",
+        "file": "Project_PRP.md"
+      },
+      {
+        "status": "M",
+        "file": "README.md"
+      },
+      {
+        "status": "A",
+        "file": "ai_docs/ats_guidelines.md"
+      },
+      {
+        "status": "A",
+        "file": "examples/sample_resume.md"
+      },
+      {
+        "status": "M",
+        "file": "pyproject.toml"
+      },
+      {
+        "status": "A",
+        "file": "src/__init__.py"
+      },
+      {
+        "status": "A",
+        "file": "src/formatter.py"
+      },
+      {
+        "status": "A",
+        "file": "src/generator.py"
+      },
+      {
+        "status": "A",
+        "file": "src/parser.py"
+      },
+      {
+        "status": "A",
+        "file": "src/templates/resume.html"
+      },
+      {
+        "status": "A",
+        "file": "src/templates/styles.css"
+      },
+      {
+        "status": "A",
+        "file": "tests/__init__.py"
+      },
+      {
+        "status": "A",
+        "file": "tests/test_formatter.py"
+      },
+      {
+        "status": "A",
+        "file": "tests/test_generator.py"
+      },
+      {
+        "status": "A",
+        "file": "tests/test_parser.py"
+      },
+      {
+        "status": "A",
+        "file": "uv.lock"
+      }
+    ],
+    "modified_files": [
+      {
+        "status": "M",
+        "file": ".gitignore"
+      }
+    ],
+    "untracked_files": [],
+    "has_changes": true
+  },
+  "stash_count": 0,
+  "remote_branches": [
+    "origin/main"
+  ],
+  "operation_context": "increment_to_0.1.0-alpha.2",
+  "backup_id": "backup_20250704_130332"
+}

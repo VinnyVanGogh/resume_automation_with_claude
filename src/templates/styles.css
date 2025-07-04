@@ -1,0 +1,348 @@
+/* ATS-Optimized Resume Styles - PDF Focus */
+
+/* Base styles optimized for PDF generation */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    font-size: 11pt;
+    line-height: 1.2;
+    color: #000;
+    background: #fff;
+    max-width: 8.5in;
+    margin: 0 auto;
+    padding: 0.75in;
+}
+
+/* Typography hierarchy optimized for ATS parsing */
+h1 {
+    font-size: 20pt;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 8pt;
+    letter-spacing: 0.5pt;
+}
+
+h2 {
+    font-size: 14pt;
+    font-weight: bold;
+    margin-top: 16pt;
+    margin-bottom: 8pt;
+    border-bottom: 1pt solid #000;
+    padding-bottom: 2pt;
+    text-transform: uppercase;
+}
+
+h3 {
+    font-size: 12pt;
+    font-weight: bold;
+    margin-top: 10pt;
+    margin-bottom: 4pt;
+}
+
+h4 {
+    font-size: 11pt;
+    font-weight: bold;
+    margin-top: 6pt;
+    margin-bottom: 2pt;
+}
+
+/* Contact information - critical for ATS */
+.contact-info {
+    text-align: center;
+    margin-bottom: 20pt;
+    font-size: 11pt;
+}
+
+.contact-info p {
+    margin: 4pt 0;
+    line-height: 1.3;
+}
+
+.contact-info .contact-line {
+    margin: 2pt 0;
+}
+
+/* Professional summary section */
+.summary {
+    margin-bottom: 16pt;
+}
+
+.summary p {
+    text-align: justify;
+    margin-bottom: 8pt;
+}
+
+/* Experience section - most critical for ATS */
+.experience-item {
+    margin-bottom: 14pt;
+    page-break-inside: avoid;
+}
+
+.job-title {
+    font-weight: bold;
+    font-size: 12pt;
+}
+
+.company-name {
+    font-weight: bold;
+    font-size: 11pt;
+}
+
+.job-dates {
+    font-style: italic;
+    color: #333;
+    font-size: 10pt;
+    margin-bottom: 6pt;
+}
+
+.job-location {
+    color: #333;
+    font-size: 10pt;
+}
+
+/* Education section */
+.education-item {
+    margin-bottom: 10pt;
+}
+
+.degree {
+    font-weight: bold;
+    font-size: 11pt;
+}
+
+.institution {
+    font-size: 11pt;
+    margin-bottom: 2pt;
+}
+
+.education-dates {
+    font-style: italic;
+    color: #333;
+    font-size: 10pt;
+}
+
+/* Skills section - optimized for keyword parsing */
+.skills-section {
+    margin-bottom: 16pt;
+}
+
+.skills-category {
+    margin-bottom: 8pt;
+}
+
+.skills-category strong {
+    font-weight: bold;
+    display: inline-block;
+    min-width: 100pt;
+}
+
+.skills-list {
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
+
+/* Lists - ATS-friendly bullet points */
+ul {
+    margin: 8pt 0;
+    padding-left: 18pt;
+    list-style-type: disc;
+}
+
+li {
+    margin: 4pt 0;
+    line-height: 1.3;
+    text-align: justify;
+}
+
+/* No nested lists for ATS compatibility */
+ul ul {
+    margin: 2pt 0;
+    padding-left: 15pt;
+}
+
+/* Paragraphs */
+p {
+    margin: 6pt 0;
+    line-height: 1.3;
+    text-align: left;
+}
+
+/* Strong emphasis for keywords */
+strong, b {
+    font-weight: bold;
+}
+
+em, i {
+    font-style: italic;
+}
+
+/* Links - maintain readability in PDF */
+a {
+    color: #000;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Section dividers */
+.section {
+    margin-bottom: 20pt;
+    page-break-inside: avoid;
+}
+
+.section:last-child {
+    margin-bottom: 0;
+}
+
+/* PDF-specific optimizations */
+@media print {
+    body {
+        margin: 0;
+        padding: 0.75in;
+        font-size: 11pt;
+    }
+    
+    /* Prevent page breaks in critical areas */
+    h1, h2, h3 {
+        page-break-after: avoid;
+    }
+    
+    .experience-item,
+    .education-item,
+    .skills-category {
+        page-break-inside: avoid;
+    }
+    
+    /* Ensure consistent spacing */
+    .section {
+        margin-bottom: 18pt;
+    }
+    
+    /* Remove any background colors */
+    * {
+        background: transparent !important;
+        color: #000 !important;
+    }
+    
+    /* Optimize for single page when possible */
+    .compact {
+        margin-bottom: 12pt;
+    }
+    
+    .compact h2 {
+        margin-top: 12pt;
+        margin-bottom: 6pt;
+    }
+    
+    .compact .experience-item {
+        margin-bottom: 10pt;
+    }
+}
+
+/* WeasyPrint specific optimizations */
+@page {
+    size: Letter;
+    margin: 0.75in;
+    
+    @top-center {
+        content: none;
+    }
+    
+    @bottom-center {
+        content: none;
+    }
+}
+
+/* Avoid widows and orphans */
+h1, h2, h3, h4, h5, h6 {
+    orphans: 3;
+    widows: 3;
+}
+
+p, li {
+    orphans: 2;
+    widows: 2;
+}
+
+/* Tables (use sparingly for ATS compatibility) */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 8pt 0;
+}
+
+td, th {
+    padding: 4pt 8pt;
+    text-align: left;
+    vertical-align: top;
+    border: none;
+}
+
+/* Certifications and additional sections */
+.certifications {
+    margin-bottom: 16pt;
+}
+
+.certification-item {
+    margin-bottom: 6pt;
+}
+
+.cert-name {
+    font-weight: bold;
+}
+
+.cert-issuer {
+    color: #333;
+}
+
+.cert-date {
+    font-style: italic;
+    color: #333;
+    font-size: 10pt;
+}
+
+/* Projects section */
+.projects {
+    margin-bottom: 16pt;
+}
+
+.project-item {
+    margin-bottom: 10pt;
+}
+
+.project-name {
+    font-weight: bold;
+    font-size: 11pt;
+}
+
+.project-description {
+    margin-top: 4pt;
+}
+
+/* Responsive adjustments for different page sizes */
+@media screen and (max-width: 8.5in) {
+    body {
+        padding: 0.5in;
+    }
+}
+
+/* Accessibility improvements */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
