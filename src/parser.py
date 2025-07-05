@@ -34,7 +34,7 @@ class ResumeSection:
     metadata: dict[str, str] | None = None
 
 
-class ATSRenderer(mistune.BaseRenderer):
+class ATSRenderer(mistune.HTMLRenderer):
     """
     Custom Mistune renderer for ATS-compliant parsing.
 
@@ -50,20 +50,18 @@ class ATSRenderer(mistune.BaseRenderer):
         self.current_section_content: List[str] = []
         self.current_level: int = 0
 
-    def heading(self, token: dict, state) -> str:
+    def heading(self, text: str, level: int, **attrs) -> str:
         """
         Handle heading elements for section detection.
 
         Args:
-            token: Token containing heading data
-            state: Parser state
+            text: The heading text
+            level: Heading level (1-6)
+            **attrs: Additional attributes
 
         Returns:
             str: Processed heading text
         """
-        text = token.get('raw', '')
-        level = token.get('level', 1)
-        
         # Save previous section if it exists
         if self.current_section:
             self.sections[self.current_section] = ResumeSection(
@@ -76,128 +74,59 @@ class ATSRenderer(mistune.BaseRenderer):
         self.current_section = text.strip().lower()
         self.current_section_content = []
         self.current_level = level
-        return text
+        return super().heading(text, level, **attrs)
 
-    def paragraph(self, token: dict, state) -> str:
+    def paragraph(self, text: str) -> str:
         """
         Handle paragraph elements.
 
         Args:
-            token: Token containing paragraph data
-            state: Parser state
+            text: Paragraph text
 
         Returns:
             str: Processed paragraph text
         """
-        text = token.get('raw', '')
-        if self.current_section:
+        if self.current_section and text.strip():
             self.current_section_content.append(text.strip())
-        return text
+        return super().paragraph(text)
 
-    def list_item(self, token: dict, state) -> str:
+    def list_item(self, text: str) -> str:
         """
         Handle list item elements for bullet extraction.
 
         Args:
-            token: Token containing list item data
-            state: Parser state
+            text: List item text
 
         Returns:
             str: Processed list item text
         """
-        text = token.get('raw', '')
         if self.current_section:
+            # Clean up HTML tags and extract plain text
+            import re
+            # Remove HTML tags first
+            cleaned_text = re.sub(r'<[^>]+>', '', text)
             # Clean up bullet point markers
-            cleaned_text = re.sub(r'^[\s\-\*\+•]+', '', text.strip())
+            cleaned_text = re.sub(r'^[\s\-\*\+•]+', '', cleaned_text.strip())
             if cleaned_text:
                 self.current_section_content.append(cleaned_text)
-        return text
+        return super().list_item(text)
 
-    def link(self, token: dict, state) -> str:
+    def link(self, link: str, text: str = None, title: str = None) -> str:
         """
         Handle link elements.
 
         Args:
-            token: Token containing link data
-            state: Parser state
+            link: The URL
+            text: Link text
+            title: Link title
 
         Returns:
             str: Processed link
         """
-        link = token.get('link', '')
-        text = token.get('raw', '')
         if self.current_section:
             link_text = text or link
             self.current_section_content.append(f"{link_text}: {link}")
-        return text or link
-
-    def blank_line(self, token: dict, state) -> str:
-        """Handle blank lines."""
-        return ""
-
-    def text(self, token: dict, state) -> str:
-        """Handle plain text."""
-        text = token.get('raw', '')
-        if self.current_section:
-            self.current_section_content.append(text.strip())
-        return text
-
-    def emphasis(self, token: dict, state) -> str:
-        """Handle emphasized text."""
-        return token.get('raw', '')
-
-    def strong(self, token: dict, state) -> str:
-        """Handle strong text."""
-        return token.get('raw', '')
-
-    def codespan(self, token: dict, state) -> str:
-        """Handle inline code."""
-        return token.get('raw', '')
-
-    def linebreak(self, token: dict, state) -> str:
-        """Handle line breaks."""
-        return ""
-
-    def softbreak(self, token: dict, state) -> str:
-        """Handle soft breaks."""
-        return " "
-
-    def inline_html(self, token: dict, state) -> str:
-        """Handle inline HTML."""
-        return token.get('raw', '')
-
-    def block_text(self, token: dict, state) -> str:
-        """Handle block text."""
-        text = token.get('raw', '')
-        if self.current_section:
-            self.current_section_content.append(text.strip())
-        return text
-
-    def block_code(self, token: dict, state) -> str:
-        """Handle code blocks."""
-        code = token.get('raw', '')
-        if self.current_section:
-            self.current_section_content.append(f"Code: {code.strip()}")
-        return code
-
-    def block_quote(self, token: dict, state) -> str:
-        """Handle block quotes."""
-        text = token.get('raw', '')
-        if self.current_section:
-            self.current_section_content.append(f"Quote: {text.strip()}")
-        return text
-
-    def list(self, token: dict, state) -> str:
-        """Handle lists."""
-        return token.get('raw', '')
-
-    def thematic_break(self, token: dict, state) -> str:
-        """Handle thematic breaks (horizontal rules)."""
-        return ""
-
-    def image(self, token: dict, state) -> str:
-        """Handle images."""
-        return token.get('alt', '') or token.get('src', '')
+        return super().link(link, text, title)
 
     def finalize_sections(self) -> Dict[str, ResumeSection]:
         """
@@ -346,16 +275,25 @@ class MarkdownResumeParser:
         name_match = re.search(r'^#\s+(.+)$', markdown_content, re.MULTILINE)
         name = name_match.group(1).strip() if name_match else "Unknown"
         
-        # Extract email
-        email_match = re.search(r'\b([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})\b', markdown_content)
+        # Extract email - support Unicode characters
+        email_match = re.search(r'\b([\w._%+-]+@[\w.-]+\.[a-zA-Z]{2,})\b', markdown_content, re.UNICODE)
         email = email_match.group(1) if email_match else None
         
         if not email:
             raise InvalidMarkdownError("Email address is required but not found")
         
-        # Extract phone
-        phone_match = re.search(r'(\+?[\d\s\-\(\)\.]{10,})', markdown_content)
-        phone = phone_match.group(1).strip() if phone_match else None
+        # Extract phone - be more specific to avoid matching dates
+        phone_patterns = [
+            r'\+?1?[-.\s]?\(?(\d{3})\)?[-.\s]?(\d{3})[-.\s]?(\d{4})',  # US phone
+            r'\+\d{1,3}[-.\s]?\d{4,14}',  # International format
+            r'\(\d{3}\)\s?\d{3}-\d{4}',  # (555) 123-4567
+        ]
+        phone = None
+        for pattern in phone_patterns:
+            phone_match = re.search(pattern, markdown_content)
+            if phone_match:
+                phone = phone_match.group(0).strip()
+                break
         
         # Extract URLs (LinkedIn, GitHub, website)
         urls = re.findall(r'https?://[^\s\)]+', markdown_content)
@@ -382,15 +320,86 @@ class MarkdownResumeParser:
         Returns:
             List[Experience]: List of experience entries
         """
+        # Look for experience section and subsections
         experience_section = sections.get('experience') or sections.get('work experience')
         if not experience_section:
             return []
         
         experiences = []
+        
+        # First, try to extract from the main experience section content
         content = experience_section.content
         
-        # Group content by experience entries (assuming each starts with title/company)
+        # Also look for subsections that are experience entries (level 3 headings under experience)
+        experience_subsections = []
+        for section_name, section in sections.items():
+            # Look for sections that could be experience subsections
+            # Must be level 3 and contain job title keywords AND exclude education/certification keywords
+            if (section.level == 3 and 
+                any(keyword in section_name.lower() for keyword in ['developer', 'engineer', 'manager', 'analyst', 'director', 'lead', 'senior', 'junior', 'intern', 'consultant', 'specialist', 'coordinator', 'administrator']) and
+                not any(exclude_keyword in section_name.lower() for exclude_keyword in ['bachelor', 'master', 'phd', 'degree', 'university', 'college', 'certified', 'certification', 'aws', 'google cloud', 'microsoft', 'cisco'])):
+                experience_subsections.append((section_name, section))
+        
+        # If we found subsections, process them as individual experience entries
+        if experience_subsections:
+            for section_name, section in experience_subsections:
+                exp_entry = self._parse_experience_from_subsection(section_name, section)
+                if exp_entry:
+                    experiences.append(exp_entry)
+        else:
+            # Fall back to parsing the main experience section content
+            experiences = self._parse_experience_from_content(content)
+        
+        return experiences
+
+    def _parse_experience_from_subsection(self, section_name: str, section: ResumeSection) -> Optional[Experience]:
+        """Parse experience entry from a subsection."""
+        # Extract title and company from section name
+        title = "Unknown"
+        company = "Unknown"
+        start_date = None
+        end_date = None
+        
+        # Try different formats: "Title at Company", "Title - Company", etc.
+        if ' at ' in section_name:
+            parts = section_name.split(' at ', 1)
+            title = parts[0].strip().title()  # Convert to title case
+            company = parts[1].strip().title()  # Convert to title case
+        elif ' - ' in section_name:
+            parts = section_name.split(' - ', 1)
+            title = parts[0].strip().title()  # Convert to title case
+            company = parts[1].strip().title()  # Convert to title case
+        else:
+            # Just use the section name as title
+            title = section_name.title()
+        
+        # Extract bullets and look for dates in the content
+        bullets = []
+        for line in section.content:
+            line = line.strip()
+            if line:
+                # Check if this line contains date information
+                date_match = re.search(r'(\w+\s+\d{4})\s*[-–]\s*(\w+\s+\d{4}|Present|Current)', line, re.IGNORECASE)
+                if date_match and not start_date:
+                    start_date = date_match.group(1)
+                    end_date = date_match.group(2)
+                    continue  # Don't add this line as a bullet
+                
+                bullets.append(line)
+        
+        return Experience(
+            title=title,
+            company=company,
+            start_date=start_date or "Unknown",
+            end_date=end_date or "Unknown",
+            bullets=bullets
+        )
+    
+    def _parse_experience_from_content(self, content: List[str]) -> List[Experience]:
+        """Parse experience entries from flat content list."""
+        experiences = []
         current_exp = {}
+        
         for line in content:
             line = line.strip()
             if not line:
@@ -457,29 +466,78 @@ class MarkdownResumeParser:
             return []
         
         education_entries = []
-        content = education_section.content
         
-        current_edu = {}
-        for line in content:
-            line = line.strip()
-            if not line:
-                continue
+        # Look for education subsections (degree entries as separate sections)
+        degree_sections = []
+        for section_name, section in sections.items():
+            # Check if this looks like a degree section
+            if (section_name != 'education' and 
+                any(keyword in section_name.lower() for keyword in 
+                    ['bachelor', 'master', 'phd', 'ph.d', 'doctorate', 'associate', 'diploma', 'certificate', 'degree'])):
+                degree_sections.append((section_name, section))
+        
+        # Process degree subsections
+        for section_name, section in degree_sections:
+            degree = section_name.title()  # Convert to title case
             
-            # Check if this looks like a degree or school
-            if re.match(r'^[A-Z][^.]+$', line) and not line.startswith('-'):
-                # Save previous education if exists
-                if current_edu:
-                    education_entries.append(self._create_education_from_dict(current_edu))
+            # Extract school and other info from content
+            school = 'Unknown'
+            start_date = None
+            end_date = None
+            
+            if section.content:
+                # First line is usually school, second might be dates
+                lines = []
+                for item in section.content:
+                    lines.extend(item.split('\n'))
                 
-                # Start new education entry
-                current_edu = {'degree': line}
-            elif current_edu and not current_edu.get('school'):
-                # This is likely the school name
-                current_edu['school'] = line
+                for line in lines:
+                    line = line.strip()
+                    if not line:
+                        continue
+                    
+                    # Check if this looks like dates
+                    if re.match(r'\d{4}[-–]\d{4}|\d{4}-Present|\d{4}', line):
+                        if '-' in line or '–' in line:
+                            parts = re.split(r'[-–]', line)
+                            start_date = parts[0].strip()
+                            end_date = parts[1].strip() if len(parts) > 1 else None
+                        else:
+                            start_date = line
+                    elif not re.match(r'\d{4}', line):  # Not a year, likely school
+                        school = line
+            
+            education_entries.append(Education(
+                degree=degree,
+                school=school,
+                start_date=start_date,
+                end_date=end_date
+            ))
         
-        # Add the last education entry
-        if current_edu:
-            education_entries.append(self._create_education_from_dict(current_edu))
+        # If no degree subsections found, try original approach
+        if not education_entries:
+            content = education_section.content
+            current_edu = {}
+            for line in content:
+                line = line.strip()
+                if not line:
+                    continue
+                
+                # Check if this looks like a degree or school
+                if re.match(r'^[A-Z][^.]+$', line) and not line.startswith('-'):
+                    # Save previous education if exists
+                    if current_edu:
+                        education_entries.append(self._create_education_from_dict(current_edu))
+                    
+                    # Start new education entry
+                    current_edu = {'degree': line}
+                elif current_edu and not current_edu.get('school'):
+                    # This is likely the school name
+                    current_edu['school'] = line
+            
+            # Add the last education entry
+            if current_edu:
+                education_entries.append(self._create_education_from_dict(current_edu))
         
         return education_entries
 
@@ -510,7 +568,49 @@ class MarkdownResumeParser:
         categories = []
         raw_skills = []
         
-        current_category = None
+        # First check if the main skills section has content
+        if content:
+            categories, raw_skills = self._parse_skills_from_content(content)
+        
+        # Also check for skills subsections (level 3 headings under skills)
+        skills_subsections = []
+        for section_name, section in sections.items():
+            if (section.level == 3 and 
+                section_name.lower() not in ['skills', 'technical skills'] and
+                any(keyword in section_name.lower() for keyword in ['programming', 'languages', 'tools', 'frameworks', 'technologies', 'software'])):
+                skills_subsections.append((section_name, section))
+        
+        # If we found subsections, process them as skill categories
+        if skills_subsections:
+            for section_name, section in skills_subsections:
+                category_skills = []
+                for line in section.content:
+                    line = line.strip()
+                    if line:
+                        # Split by common separators
+                        skill_items = [s.strip() for s in re.split(r'[,;•|]', line) if s.strip()]
+                        category_skills.extend(skill_items)
+                
+                if category_skills:
+                    # Remove colon from category name if present
+                    category_name = section_name.rstrip(':')
+                    categories.append(SkillCategory(
+                        name=category_name,
+                        skills=category_skills
+                    ))
+        
+        if categories:
+            return Skills(categories=categories)
+        elif raw_skills:
+            return Skills(raw_skills=raw_skills)
+        else:
+            return None
+    
+    def _parse_skills_from_content(self, content: List[str]) -> tuple[List[SkillCategory], List[str]]:
+        """Parse skills from content lines."""
+        categories = []
+        raw_skills = []
+        
         for line in content:
             line = line.strip()
             if not line:
@@ -538,12 +638,7 @@ class MarkdownResumeParser:
                 else:
                     raw_skills.append(line)
         
-        if categories:
-            return Skills(categories=categories)
-        elif raw_skills:
-            return Skills(raw_skills=raw_skills)
-        else:
-            return None
+        return categories, raw_skills
 
     def _extract_summary(self, sections: Dict[str, ResumeSection]) -> Optional[str]:
         """

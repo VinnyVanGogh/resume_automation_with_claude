@@ -287,8 +287,13 @@ class ResumeValidator:
             errors.append("End date is missing")
             return errors
 
-        # Allow "Present" as end date
-        if end_date.lower() in ['present', 'current', 'ongoing']:
+        # Allow "Present", "Unknown" as end date
+        if end_date.lower() in ['present', 'current', 'ongoing', 'unknown']:
+            return errors
+        
+        # Allow "Unknown" as start date too
+        if start_date.lower() == 'unknown':
+            # If start is unknown, don't validate end date format either
             return errors
 
         # Basic date format validation
