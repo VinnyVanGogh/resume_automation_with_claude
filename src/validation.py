@@ -10,7 +10,7 @@ from datetime import datetime
 from typing import List, Optional
 
 from .models import ResumeData, ContactInfo, Experience, Education
-from .types import ValidationResult
+from .custom_types import ValidationResult
 
 
 class ResumeValidator:

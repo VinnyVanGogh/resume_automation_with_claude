@@ -13,29 +13,31 @@ Dependency Inversion: High-level modules should not depend on low-level modules.
 Open/Closed Principle: Software entities should be open for extension but closed for modification. Design your systems so that new functionality can be added with minimal changes to existing code.
 
 ## 🧱 Code Structure & Modularity
+
 - **Never create a file longer than 500 lines of code.** If a file approaches this limit, refactor by splitting it into modules or helper files.
 - **Functions should be short and focused sub 50 lines of code** and have a single responsibility.
 - **Classes should be short and focused sub 50 lines of code** and have a single responsibility.
 - **Organize code into clearly separated modules**, grouped by feature or responsibility.
 
 ## Architecture
-Strict vertical slice architecture with tests that live next to the code they test. 
+
+Strict vertical slice architecture with tests that live next to the code they test.
 
 src/project/
-    __init__.py
-    main.py
-    tests/test_main.py
-    conftest.py
-    module_one/ (eg. database, core, auth)
-        __init__.py
-        module_one.py
-        tests/
-            test_module_one.py
-    module_two/ (eg. api, ui, cli)
-        __init__.py
-        module_two.py
-        tests/
-            test_module_two.py
+**init**.py
+main.py
+tests/test_main.py
+conftest.py
+module_one/ (eg. database, core, auth)
+**init**.py
+module_one.py
+tests/
+test_module_one.py
+module_two/ (eg. api, ui, cli)
+**init**.py
+module_two.py
+tests/
+test_module_two.py
 
     features/ (eg. business logic, tools, etc.)
         feature_one/
@@ -46,19 +48,19 @@ src/project/
 
 Features can also be part of moduels if the module for example is a api integration or a cli tool.
 
-eg 
+eg
 src/project/
-    module_one/ (api integration with crm service)
-        __init__.py
-        module_one.py
-        tests/
-            test_module_one.py
-        features/
-            feature_one/ (CRM service integration slice)
-                __init__.py
-                feature.py
-                tests/
-                    test_feature.py
+module_one/ (api integration with crm service)
+**init**.py
+module_one.py
+tests/
+test_module_one.py
+features/
+feature_one/ (CRM service integration slice)
+**init**.py
+feature.py
+tests/
+test_feature.py
 
 ## Testing
 
@@ -73,11 +75,13 @@ Always test individual functions and classes.
 ## Style & Conventions
 
 ### 📎 Style & Conventions
+
 - **Use Python** as the primary language.
 - **Follow PEP8**, always use type hints, and format with `ruff`.
 - **Use `pydanticv2` for data validation**.
 - **ALWAYS use classes, data types, data models, for typesafety and verifiability**
 - **ALWAYS use docstrings for every function** using the Google style:
+
   ```python
   def example():
       """
@@ -88,7 +92,7 @@ Always test individual functions and classes.
 
       Returns:
           type: Description.
-          
+
       Raises:
           Exception: Description.
       """
@@ -124,7 +128,7 @@ uv run ruff format .
 # Run linter
 uv run ruff check .
 
-# Run type checker  
+# Run type checker
 uv run mypy .
 ```
 
@@ -173,7 +177,6 @@ This repository follows a develop → main branching strategy, where:
 - `develop` is the integration branch where features are merged
 - Feature branches are created from `develop` for work in progress
 
-
 When creating branches, follow these naming conventions:
 
 - Feature branches: `feature/descriptive-name`
@@ -181,14 +184,13 @@ When creating branches, follow these naming conventions:
 - Documentation branches: `docs/what-is-changing`
 - Refactoring branches: `refactor/what-is-changing`
 
-
 ## Behavioural Guidelines
 
 - Always use `uv` for package management.
 - Always use `ruff` for linting.
 
-- *** NEVER ASSUME OR GUESS ***
-- When in doubt, ask for clarification or ask for help. more often than not youcan do websearch to find relevant examples of check ai_docs/ for examples that the user have added. 
+- **_ NEVER ASSUME OR GUESS _**
+- When in doubt, ask for clarification or ask for help. more often than not youcan do websearch to find relevant examples of check ai_docs/ for examples that the user have added.
 
 - **Always confirm file paths & module names** exist before using them.
 
@@ -204,5 +206,6 @@ When creating branches, follow these naming conventions:
 
 ## IMPORTANT TYPES & PATTERNS
 
-### 
+###
+
 > add important types and patterns here

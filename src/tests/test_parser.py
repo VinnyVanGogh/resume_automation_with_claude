@@ -5,7 +5,7 @@ Comprehensive tests for the parser module.
 import pytest
 from src.parser import MarkdownResumeParser, ATSRenderer, ResumeSection
 from src.models import ResumeData, ContactInfo, Experience, Education, Skills
-from src.types import InvalidMarkdownError
+from src.custom_types import InvalidMarkdownError
 
 
 class TestATSRenderer:

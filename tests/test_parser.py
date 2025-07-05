@@ -5,7 +5,7 @@ Tests for the markdown resume parser module.
 import pytest
 from src.parser import MarkdownResumeParser, ResumeSection, ATSRenderer
 from src.models import ResumeData, ContactInfo
-from src.types import InvalidMarkdownError
+from src.custom_types import InvalidMarkdownError
 
 
 class TestResumeSection:

@@ -1,4 +1,6 @@
-> Command for priming Claude Code with core knowledge about your project
+---
+
+description: Command for priming Claude Code with core knowledge about your project
 
 # Prime Context for Claude Code
 
@@ -13,6 +15,7 @@ Read key files in the src/ directory
 > List any additional files that are important to understand the project.
 
 Explain back to me:
+
 - Project structure
 - Project purpose and goals
 - Key files and their purposes
