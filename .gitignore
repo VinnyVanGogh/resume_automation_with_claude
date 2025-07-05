@@ -38,6 +38,3 @@ docs/site/
 # Local project files
 videos/
 local_settings.py
-
-# git-simplifier state files
-.git-simplifier/

@@ -7,12 +7,14 @@ Generate a comprehensive specification-driven PRP with clear transformation goal
 ## Analysis Process
 
 1. **Current State Assessment**
+
    - Map existing implementation
    - Identify pain points
    - Document technical debt
    - Note integration points
 
 2. **Desired State Research**
+
    - Best practices for target state
    - Implementation examples
    - Migration strategies
@@ -26,9 +28,10 @@ Generate a comprehensive specification-driven PRP with clear transformation goal
 
 ## PRP Generation
 
-Using /PRPs/templates/prp_spec_base.md:
+Using /PRPs/templates/prp_spec.md:
 
 ### State Documentation
+
 ```yaml
 current_state:
   files: [list affected files]
@@ -42,12 +45,15 @@ desired_state:
 ```
 
 ### Hierarchical Objectives
+
 1. **High-Level**: Overall transformation goal
 2. **Mid-Level**: Major milestones
 3. **Low-Level**: Specific tasks with validation
 
 ### Task Specification with information dense keywords
+
 #### Information dense keywords:
+
 - MIRROR: Mirror the state of existing code to be mirrored to another use case
 - COPY: Copy the state of existing code to be copied to another use case
 - ADD: Add new code to the codebase
@@ -59,6 +65,7 @@ desired_state:
 - CREATE: Create new code
 
 #### Example:
+
 ```yaml
 task_name:
   action: MODIFY/CREATE
@@ -73,6 +80,7 @@ task_name:
 ```
 
 ### Implementation Strategy
+
 - Identify dependencies
 - Order tasks by priority and implementation order and dependencies logic
 - Include rollback plans
@@ -81,6 +89,7 @@ task_name:
 ## User Interaction Points
 
 1. **Objective Validation**
+
    - Review hierarchical breakdown
    - Confirm priorities
    - Identify missing pieces
@@ -91,15 +100,18 @@ task_name:
    - Set go/no-go criteria
 
 ## Context Requirements
+
 - Current implementation details
 - Target architecture examples
 - Migration best practices
 - Testing strategies
 
 ## Output
+
 Save as: `SPEC_PRP/PRPs/{spec-name}.md`
 
 ## Quality Checklist
+
 - [ ] Current state fully documented
 - [ ] Desired state clearly defined
 - [ ] All objectives measurable

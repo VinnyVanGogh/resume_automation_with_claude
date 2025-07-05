@@ -1,0 +1,12 @@
+{
+  "total_requests": 0,
+  "total_tokens": 0,
+  "total_cost_estimate": 0.0,
+  "daily_requests": 0,
+  "daily_tokens": 0,
+  "daily_cost_estimate": 0.0,
+  "last_reset_date": "2025-07-04",
+  "last_request_cost": 0.0,
+  "last_request_tokens": 0,
+  "last_request_model": ""
+}

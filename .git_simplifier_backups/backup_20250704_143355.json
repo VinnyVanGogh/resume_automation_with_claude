@@ -1,0 +1,56 @@
+{
+  "timestamp": "2025-07-04T14:33:55.930042",
+  "current_branch": "feature/phase-2-parser-implementation",
+  "commit_hash": "599bb5ee514d397a784ecb312a2af4e7c9996e27",
+  "tags": [
+    "v0.1.0-alpha.2"
+  ],
+  "uncommitted_changes": {
+    "staged_files": [],
+    "modified_files": [
+      {
+        "status": "M",
+        "file": ".claude/commands/spec-create-adv.md"
+      },
+      {
+        "status": "M",
+        "file": ".gitignore"
+      },
+      {
+        "status": "M",
+        "file": "pyproject.toml"
+      },
+      {
+        "status": "M",
+        "file": "src/__init__.py"
+      },
+      {
+        "status": "M",
+        "file": "src/formatter.py"
+      },
+      {
+        "status": "M",
+        "file": "src/parser.py"
+      },
+      {
+        "status": "M",
+        "file": "uv.lock"
+      }
+    ],
+    "untracked_files": [
+      ".coverage",
+      ".git-simplifier/.ai_usage.json",
+      ".git-simplifier/.version_state.json",
+      ".git-simplifier/git-simplifier.toml",
+      "src/types.py",
+      "tests/conftest.py"
+    ],
+    "has_changes": true
+  },
+  "stash_count": 0,
+  "remote_branches": [
+    "origin/main"
+  ],
+  "operation_context": "increment_to_0.1.0-alpha.3",
+  "backup_id": "backup_20250704_143355"
+}

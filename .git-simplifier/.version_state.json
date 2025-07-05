@@ -1,0 +1,123 @@
+{
+  "current_version": "0.1.0-alpha.3",
+  "version_type": "alpha",
+  "major": 0,
+  "minor": 1,
+  "patch": 0,
+  "alpha": 3,
+  "beta": 0,
+  "history": [
+    {
+      "version": "0.1.0-alpha.3",
+      "message": "finished phase 1",
+      "timestamp": "2025-07-04T21:33:56.169459+00:00",
+      "category": "Changed",
+      "files_changed": [
+        {
+          "Modified": ".claude/commands/spec-create-adv.md"
+        },
+        {
+          "Modified": ".gitignore"
+        },
+        {
+          "Modified": "pyproject.toml"
+        },
+        {
+          "Modified": "src/__init__.py"
+        },
+        {
+          "Modified": "src/formatter.py"
+        },
+        {
+          "Modified": "src/parser.py"
+        },
+        {
+          "Modified": "uv.lock"
+        },
+        {
+          "Untracked": ".coverage"
+        },
+        {
+          "Untracked": ".git-simplifier/.ai_usage.json"
+        },
+        {
+          "Untracked": ".git-simplifier/.version_state.json"
+        },
+        {
+          "Untracked": ".git-simplifier/git-simplifier.toml"
+        },
+        {
+          "Untracked": ".git_simplifier_backups/backup_20250704_143355.json"
+        },
+        {
+          "Untracked": "src/types.py"
+        },
+        {
+          "Untracked": "tests/conftest.py"
+        }
+      ]
+    },
+    {
+      "version": "0.1.0-alpha.2",
+      "message": "starting on base architecture, got pieces of phase 1 complete",
+      "timestamp": "2025-07-04T20:03:32.497450+00:00",
+      "category": "Changed",
+      "files_changed": [
+        {
+          "Modified": ".claude/commands/execute-base-prp.md"
+        },
+        {
+          "Renamed": "Project_PRP.md"
+        },
+        {
+          "Modified": "README.md"
+        },
+        {
+          "Added": "ai_docs/ats_guidelines.md"
+        },
+        {
+          "Added": "examples/sample_resume.md"
+        },
+        {
+          "Modified": "pyproject.toml"
+        },
+        {
+          "Added": "src/__init__.py"
+        },
+        {
+          "Added": "src/formatter.py"
+        },
+        {
+          "Added": "src/generator.py"
+        },
+        {
+          "Added": "src/parser.py"
+        },
+        {
+          "Added": "src/templates/resume.html"
+        },
+        {
+          "Added": "src/templates/styles.css"
+        },
+        {
+          "Added": "tests/__init__.py"
+        },
+        {
+          "Added": "tests/test_formatter.py"
+        },
+        {
+          "Added": "tests/test_generator.py"
+        },
+        {
+          "Added": "tests/test_parser.py"
+        },
+        {
+          "Added": "uv.lock"
+        },
+        {
+          "Untracked": ".git_simplifier_backups/backup_20250704_130332.json"
+        }
+      ]
+    }
+  ]
+}

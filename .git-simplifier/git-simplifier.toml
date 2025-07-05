@@ -1,0 +1,58 @@
+# Git Simplifier Configuration
+
+[build]
+build_dir = "onboarding_architect"
+
+auto_detect = true
+timeout = 300
+pre_build_commands = []
+post_build_commands = []
+
+[build.environment]
+
+[git]
+auto_push = true
+create_tags = true
+tag_prefix = "v"
+commit_template = "v{version} - {message}"
+push_tags = true
+safety_checks = true
+
+[ai]
+enabled = false
+provider = "openai"
+model = "gpt-4.1-nano"
+max_tokens = 150
+temperature = 0.7
+enhance_commits = true
+api_key_env = "OPENAI_API_KEY"
+
+[changelog]
+changelog_file = "CHANGELOG.md"
+format = "keepachangelog"
+include_git_changes = true
+auto_categorize = true
+excluded_files = [".version_state.json", "CHANGELOG.md"]
+
+[version]
+version_file = ".version_state.json"
+default_version = "0.1.0-alpha.1"
+default_version_type = "alpha"
+default_major = 0
+default_minor = 1
+default_patch = 0
+default_alpha = 1
+default_beta = 0
+
+[ui]
+use_rich = true
+theme = "default"
+show_progress = true
+verbose = false
+quiet = false
+color = true
+
+[safety]
+level = "normal"
+auto_rollback = true
+backup_retention_days = 30
