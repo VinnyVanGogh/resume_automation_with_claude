@@ -5,7 +5,7 @@ Comprehensive tests for the validation module.
 import pytest
 from src.validation import ResumeValidator
 from src.models import ResumeData, ContactInfo, Experience, Education, Skills, SkillCategory
-from src.types import ValidationResult
+from src.custom_types import ValidationResult
 
 
 class TestResumeValidator:

@@ -12,7 +12,7 @@ from typing import Any, Dict, List, Optional
 import mistune
 
 from .models import ResumeData, ContactInfo, Experience, Education, Skills, SkillCategory
-from .types import InvalidMarkdownError
+from .custom_types import InvalidMarkdownError
 from .validation import ResumeValidator
 
 
@@ -44,13 +44,13 @@ class ATSRenderer(mistune.HTMLRenderer):
 
     def __init__(self) -> None:
         """Initialize the ATS renderer."""
-        super().__init__()
+        super().__init__()  # type: ignore[no-untyped-call]
         self.sections: Dict[str, ResumeSection] = {}
         self.current_section: Optional[str] = None
         self.current_section_content: List[str] = []
         self.current_level: int = 0
 
-    def heading(self, text: str, level: int, **attrs) -> str:
+    def heading(self, text: str, level: int, **attrs: Any) -> str:
         """
         Handle heading elements for section detection.
 
@@ -111,22 +111,22 @@ class ATSRenderer(mistune.HTMLRenderer):
                 self.current_section_content.append(cleaned_text)
         return super().list_item(text)
 
-    def link(self, link: str, text: str = None, title: str = None) -> str:
+    def link(self, text: str, url: str, title: Any = None) -> str:
         """
         Handle link elements.
 
         Args:
-            link: The URL
             text: Link text
+            url: The URL
             title: Link title
 
         Returns:
             str: Processed link
         """
         if self.current_section:
-            link_text = text or link
-            self.current_section_content.append(f"{link_text}: {link}")
-        return super().link(link, text, title)
+            link_text = text or url
+            self.current_section_content.append(f"{link_text}: {url}")
+        return super().link(text, url, title)
 
     def finalize_sections(self) -> Dict[str, ResumeSection]:
         """
@@ -208,7 +208,10 @@ class MarkdownResumeParser:
                 summary=summary,
                 experience=experience,
                 education=education,
-                skills=skills
+                skills=skills,
+                projects=None,
+                certifications=None,
+                additional_sections=None
             )
             
             # Validate the parsed result if enabled
@@ -307,7 +310,8 @@ class MarkdownResumeParser:
             phone=phone,
             linkedin=linkedin,
             github=github,
-            website=website
+            website=website,
+            location=None
         )
 
     def _extract_experience(self, sections: Dict[str, ResumeSection]) -> List[Experience]:
@@ -392,13 +396,14 @@ class MarkdownResumeParser:
             company=company,
             start_date=start_date or "Unknown",
             end_date=end_date or "Unknown",
+            location=None,
             bullets=bullets
         )
     
     def _parse_experience_from_content(self, content: List[str]) -> List[Experience]:
         """Parse experience entries from flat content list."""
         experiences = []
-        current_exp = {}
+        current_exp: Dict[str, Any] = {}
         
         for line in content:
             line = line.strip()
@@ -448,6 +453,7 @@ class MarkdownResumeParser:
             company=exp_dict.get('company', 'Unknown'),
             start_date=exp_dict.get('start_date', 'Unknown'),
             end_date=exp_dict.get('end_date', 'Unknown'),
+            location=exp_dict.get('location'),
             bullets=exp_dict.get('bullets', [])
         )
 
@@ -511,13 +517,17 @@ class MarkdownResumeParser:
                 degree=degree,
                 school=school,
                 start_date=start_date,
-                end_date=end_date
+                end_date=end_date,
+                location=None,
+                gpa=None,
+                honors=None,
+                coursework=None
             ))
         
         # If no degree subsections found, try original approach
         if not education_entries:
             content = education_section.content
-            current_edu = {}
+            current_edu: Dict[str, Any] = {}
             for line in content:
                 line = line.strip()
                 if not line:
@@ -547,7 +557,11 @@ class MarkdownResumeParser:
             degree=edu_dict.get('degree', 'Unknown'),
             school=edu_dict.get('school', 'Unknown'),
             start_date=edu_dict.get('start_date'),
-            end_date=edu_dict.get('end_date')
+            end_date=edu_dict.get('end_date'),
+            location=edu_dict.get('location'),
+            gpa=edu_dict.get('gpa'),
+            honors=edu_dict.get('honors'),
+            coursework=edu_dict.get('coursework')
         )
 
     def _extract_skills(self, sections: Dict[str, ResumeSection]) -> Optional[Skills]:
@@ -565,8 +579,8 @@ class MarkdownResumeParser:
             return None
         
         content = skills_section.content
-        categories = []
-        raw_skills = []
+        categories: List[SkillCategory] = []
+        raw_skills: List[str] = []
         
         # First check if the main skills section has content
         if content:
@@ -600,9 +614,9 @@ class MarkdownResumeParser:
                     ))
         
         if categories:
-            return Skills(categories=categories)
+            return Skills(categories=categories, raw_skills=None)
         elif raw_skills:
-            return Skills(raw_skills=raw_skills)
+            return Skills(categories=None, raw_skills=raw_skills)
         else:
             return None
     

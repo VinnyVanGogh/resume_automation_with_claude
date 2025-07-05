@@ -11,7 +11,7 @@ __author__ = "Resume Automation Team"
 from .formatter import ATSFormatter
 from .generator import ResumeGenerator
 from .parser import MarkdownResumeParser
-from .types import (
+from .custom_types import (
     ATSComplianceError,
     InvalidMarkdownError,
     ResumeConversionError,
