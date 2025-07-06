@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" vocab="http://schema.org/" typeof="Person">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow">
+    <meta name="format-detection" content="telephone=yes">
+    
+    <!-- ATS-friendly meta tags -->
+    <meta name="description" content="{% block meta_description %}Professional resume{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}resume, professional, career{% endblock %}">
+    <meta name="author" content="{% block meta_author %}{% endblock %}">
+    
+    <!-- Print optimization -->
+    <meta name="print-color-adjust" content="exact">
+    
+    <title>{% block title %}Professional Resume{% endblock %}</title>
+    
+    {% block meta %}{% endblock %}
+    
+    <!-- Base styles -->
+    <link rel="stylesheet" href="styles.css">
+    {% block styles %}{% endblock %}
+    
+    <!-- Comprehensive structured data for ATS optimization -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "{% block structured_name %}{% endblock %}",
+        "email": "{% block structured_email %}{% endblock %}",
+        "telephone": "{% block structured_phone %}{% endblock %}",
+        "url": "{% block structured_website %}{% endblock %}",
+        "sameAs": [
+            {% block structured_social %}{% endblock %}
+        ],
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "{% block structured_location %}{% endblock %}"
+        },
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "email": "{% block structured_contact_email %}{% endblock %}",
+            "telephone": "{% block structured_contact_phone %}{% endblock %}"
+        },
+        "hasOccupation": [
+            {% block structured_experience %}{% endblock %}
+        ],
+        "alumniOf": [
+            {% block structured_education %}{% endblock %}
+        ],
+        "knowsAbout": [
+            {% block structured_skills %}{% endblock %}
+        ],
+        "description": "{% block structured_summary %}{% endblock %}",
+        "hasCredential": [
+            {% block structured_certifications %}{% endblock %}
+        ],
+        "workExample": [
+            {% block structured_projects %}{% endblock %}
+        ]
+    }
+    </script>
+</head>
+<body>
+    <!-- Skip navigation for accessibility -->
+    <a href="#main-content" class="sr-only">Skip to main content</a>
+    
+    <!-- Page wrapper for semantic structure -->
+    <div class="page-wrapper">
+        <main id="main-content" role="main" aria-label="Resume content">
+            {% block content %}
+            <!-- Main content will be inserted here by child templates -->
+            {% endblock %}
+        </main>
+    </div>
+    
+    {% block scripts %}{% endblock %}
+</body>
+</html>

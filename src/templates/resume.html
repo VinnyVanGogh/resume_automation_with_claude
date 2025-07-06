@@ -1,193 +1,253 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="{{ meta_description | default('Professional resume') }}">
-    <title>{{ page_title | default(contact.name + ' - Resume') }}</title>
-    {% if config.include_styles %}
-    <link rel="stylesheet" href="styles.css">
-    {% endif %}
-    {% if custom_css %}
-    <style>
-        {{ custom_css }}
-    </style>
-    {% endif %}
-</head>
-<body>
-    <header>
-        <h1>{{ contact.name }}</h1>
-        <div class="contact-info">
-            {% if contact.email or contact.phone %}
-            <p class="contact-line">
-                {% if contact.email %}
-                <a href="mailto:{{ contact.email }}">{{ contact.email }}</a>
-                {% endif %}
-                {% if contact.email and contact.phone %} | {% endif %}
-                {% if contact.phone %}
-                <a href="tel:{{ contact.phone }}">{{ contact.phone | format_phone }}</a>
-                {% endif %}
-            </p>
-            {% endif %}
-            
-            {% if contact.linkedin or contact.github or contact.website %}
-            <p class="contact-line">
-                {% if contact.linkedin %}
-                <a href="{{ contact.linkedin }}">{{ contact.linkedin | format_url }}</a>
-                {% endif %}
-                {% if contact.linkedin and (contact.github or contact.website) %} | {% endif %}
-                {% if contact.github %}
-                <a href="{{ contact.github }}">{{ contact.github | format_url }}</a>
-                {% endif %}
-                {% if contact.github and contact.website %} | {% endif %}
-                {% if contact.website %}
-                <a href="{{ contact.website }}">{{ contact.website | format_url }}</a>
-                {% endif %}
-            </p>
-            {% endif %}
-            
-            {% if contact.location %}
-            <p class="contact-line">{{ contact.location }}</p>
-            {% endif %}
-        </div>
-    </header>
+{# Resume template using base template and components #}
+{% extends "base.html" %}
 
-    {% if has_summary and summary %}
-    <section class="section summary">
-        <h2>Summary</h2>
-        <p>{{ summary }}</p>
-    </section>
-    {% endif %}
+{# Template metadata blocks #}
+{% block title %}{{ contact.name }} - Resume{% endblock %}
+{% block meta_description %}Professional resume for {{ contact.name }}{% endblock %}
+{% block meta_keywords %}resume, {{ contact.name }}, professional, career{% endblock %}
+{% block meta_author %}{{ contact.name }}{% endblock %}
 
-    {% if experience %}
-    <section class="section experience">
-        <h2>Experience</h2>
-        {% for exp in experience %}
-        <div class="experience-item">
-            <h3 class="job-title">{{ exp.title }} | <span class="company-name">{{ exp.company }}</span></h3>
-            {% if exp.start_date or exp.location %}
-            <p class="job-meta">
-                {% if exp.start_date %}
-                <span class="job-dates">{{ exp.start_date | format_date }} - {{ exp.end_date | format_date | default('Present') }}</span>
-                {% endif %}
-                {% if exp.start_date and exp.location %} | {% endif %}
-                {% if exp.location %}
-                <span class="job-location">{{ exp.location }}</span>
-                {% endif %}
-            </p>
-            {% endif %}
-            {% if exp.bullets %}
-            <ul class="responsibilities">
-                {% for bullet in exp.bullets %}
-                <li>{{ bullet }}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-        </div>
-        {% endfor %}
-    </section>
-    {% endif %}
+{# Comprehensive structured data for maximum ATS optimization #}
+{% block structured_name %}{{ contact.name }}{% endblock %}
+{% block structured_email %}{{ contact.email }}{% endblock %}
+{% block structured_phone %}{{ contact.phone }}{% endblock %}
+{% block structured_website %}{{ contact.website }}{% endblock %}
+{% block structured_location %}{{ contact.location }}{% endblock %}
+{% block structured_contact_email %}{{ contact.email }}{% endblock %}
+{% block structured_contact_phone %}{{ contact.phone }}{% endblock %}
+{% block structured_summary %}{{ summary | replace('"', '\\"') }}{% endblock %}
 
-    {% if education %}
-    <section class="section education">
-        <h2>Education</h2>
-        {% for edu in education %}
-        <div class="education-item">
-            <h3 class="degree">{{ edu.degree }} | <span class="institution">{{ edu.school }}</span></h3>
-            {% if edu.end_date or edu.graduation_date or edu.location %}
-            <p class="education-meta">
-                {% if edu.end_date or edu.graduation_date %}
-                <span class="education-dates">
-                    {% if edu.start_date %}{{ edu.start_date | format_date }} - {% endif %}
-                    {{ (edu.end_date or edu.graduation_date) | format_date }}
-                </span>
+{% block structured_social %}
+{% if contact.linkedin %}"{{ contact.linkedin }}"{% endif %}
+{% if contact.linkedin and contact.github %},{% endif %}
+{% if contact.github %}"{{ contact.github }}"{% endif %}
+{% if (contact.linkedin or contact.github) and contact.website %},{% endif %}
+{% if contact.website %}"{{ contact.website }}"{% endif %}
+{% endblock %}
+
+{% block structured_experience %}
+{% if experience %}
+{% for exp in experience %}
+{
+    "@type": "WorkExperience",
+    "name": "{{ exp.title | replace('"', '\\"') }}",
+    "hiringOrganization": {
+        "@type": "Organization",
+        "name": "{{ exp.company | replace('"', '\\"') }}"
+    },
+    "startDate": "{{ exp.start_date }}",
+    "endDate": "{{ exp.end_date if exp.end_date.lower() != 'present' else '' }}",
+    {% if exp.location %}
+    "jobLocation": {
+        "@type": "Place",
+        "name": "{{ exp.location | replace('"', '\\"') }}"
+    },
+    {% endif %}
+    "description": "{{ exp.bullets | join('. ') | replace('"', '\\"') }}"
+}{% if not loop.last %},{% endif %}
+{% endfor %}
+{% endif %}
+{% endblock %}
+
+{% block structured_education %}
+{% if education %}
+{% for edu in education %}
+{
+    "@type": "EducationalOrganization",
+    "name": "{{ edu.school | replace('"', '\\"') }}",
+    "hasCredential": {
+        "@type": "EducationalOccupationalCredential",
+        "credentialCategory": "{{ edu.degree | replace('"', '\\"') }}",
+        {% if edu.end_date %}
+        "dateCompleted": "{{ edu.end_date }}",
+        {% endif %}
+        {% if edu.start_date %}
+        "dateCreated": "{{ edu.start_date }}",
+        {% endif %}
+        "recognizedBy": {
+            "@type": "EducationalOrganization",
+            "name": "{{ edu.school | replace('"', '\\"') }}"
+        }
+    }
+}{% if not loop.last %},{% endif %}
+{% endfor %}
+{% endif %}
+{% endblock %}
+
+{% block structured_skills %}
+{% if skills %}
+{% if skills.categories %}
+{% set skills_list = [] %}
+{% for category in skills.categories %}
+{% for skill in category.skills %}
+{% set _ = skills_list.append(skill) %}
+{% endfor %}
+{% endfor %}
+{% for skill in skills_list %}
+"{{ skill | replace('"', '\\"') }}"{% if not loop.last %},{% endif %}
+{% endfor %}
+{% elif skills.raw_skills %}
+{% for skill in skills.raw_skills %}
+"{{ skill | replace('"', '\\"') }}"{% if not loop.last %},{% endif %}
+{% endfor %}
+{% endif %}
+{% endif %}
+{% endblock %}
+
+{% block structured_projects %}
+{% if projects %}
+{% for project in projects %}
+{
+    "@type": "CreativeWork",
+    "name": "{{ project.name | replace('"', '\\"') }}",
+    {% if project.description %}
+    "description": "{{ project.description | replace('"', '\\"') }}",
+    {% endif %}
+    {% if project.url %}
+    "url": "{{ project.url }}",
+    {% endif %}
+    {% if project.technologies %}
+    "keywords": "{{ project.technologies | join(', ') | replace('"', '\\"') }}",
+    {% endif %}
+    {% if project.date %}
+    "dateCreated": "{{ project.date }}",
+    {% endif %}
+    "creator": {
+        "@type": "Person",
+        "name": "{{ contact.name }}"
+    }
+}{% if not loop.last %},{% endif %}
+{% endfor %}
+{% endif %}
+{% endblock %}
+
+{% block structured_certifications %}
+{% if certifications %}
+{% for cert in certifications %}
+{
+    "@type": "EducationalOccupationalCredential",
+    "credentialCategory": "{{ cert.name | replace('"', '\\"') }}",
+    {% if cert.issuer %}
+    "recognizedBy": {
+        "@type": "Organization",
+        "name": "{{ cert.issuer | replace('"', '\\"') }}"
+    },
+    {% endif %}
+    {% if cert.date %}
+    "dateCompleted": "{{ cert.date }}",
+    {% endif %}
+    {% if cert.expiry %}
+    "validUntil": "{{ cert.expiry }}",
+    {% endif %}
+    {% if cert.credential_id %}
+    "identifier": "{{ cert.credential_id }}",
+    {% endif %}
+    {% if cert.url %}
+    "url": "{{ cert.url }}"
+    {% endif %}
+}{% if not loop.last %},{% endif %}
+{% endfor %}
+{% endif %}
+{% endblock %}
+
+{# Additional styles if needed #}
+{% block styles %}
+{% if config.include_styles %}
+<link rel="stylesheet" href="styles.css">
+{% endif %}
+{% if custom_css %}
+<style>
+    {{ custom_css }}
+</style>
+{% endif %}
+{% endblock %}
+
+{# Main content using components #}
+{% block content %}
+    {# Header/Contact Information Component #}
+    {% include "components/header.html" %}
+
+    {# Summary Component #}
+    {% include "components/summary.html" %}
+
+    {# Experience Component #}
+    {% include "components/experience.html" %}
+
+    {# Education Component #}
+    {% include "components/education.html" %}
+
+    {# Skills Component #}
+    {% include "components/skills.html" %}
+
+    {# Projects Section (keeping original until component created) #}
+    {% if has_projects and projects %}
+    <section class="section projects-section" aria-labelledby="projects-heading">
+        <h2 id="projects-heading" class="section-title">Projects</h2>
+        {% for project in projects %}
+        <article class="project-item">
+            <header class="project-header">
+                <h3 class="project-name">{{ project.name }}</h3>
+                {% if project.technologies %}
+                <p class="project-tech">
+                    <strong>Technologies:</strong> 
+                    <span class="tech-list">{{ project.technologies | join(', ') }}</span>
+                </p>
                 {% endif %}
-                {% if (edu.end_date or edu.graduation_date) and edu.location %} | {% endif %}
-                {% if edu.location %}
-                <span class="education-location">{{ edu.location }}</span>
-                {% endif %}
-            </p>
-            {% endif %}
-            {% if edu.gpa %}
-            <p class="gpa">GPA: {{ edu.gpa }}</p>
-            {% endif %}
-            {% if edu.relevant_coursework %}
-            <div class="coursework">
-                <strong>Relevant Coursework:</strong>
-                <ul>
-                    {% for course in edu.relevant_coursework %}
-                    <li>{{ course }}</li>
-                    {% endfor %}
-                </ul>
+            </header>
+            {% if project.description %}
+            <div class="project-content">
+                <p class="project-description">{{ project.description }}</p>
             </div>
             {% endif %}
-        </div>
-        {% endfor %}
-    </section>
-    {% endif %}
-
-    {% if skills and (skills.categories or skills.raw_skills) %}
-    <section class="section skills-section">
-        <h2>Skills</h2>
-        {% if skills.categories %}
-        {% for category in skills.categories %}
-        {% if category.skills %}
-        <div class="skills-category">
-            <strong>{{ category.name }}:</strong> {{ category.skills | join(', ') }}
-        </div>
-        {% endif %}
-        {% endfor %}
-        {% elif skills.raw_skills %}
-        <div class="skills-category">
-            {{ skills.raw_skills | join(', ') }}
-        </div>
-        {% endif %}
-    </section>
-    {% endif %}
-
-    {% if has_projects and projects %}
-    <section class="section projects">
-        <h2>Projects</h2>
-        {% for project in projects %}
-        <div class="project-item">
-            <h3 class="project-name">{{ project.name }}</h3>
-            {% if project.technologies %}
-            <p class="project-tech"><strong>Technologies:</strong> {{ project.technologies | join(', ') }}</p>
-            {% endif %}
-            {% if project.description %}
-            <p class="project-description">{{ project.description }}</p>
-            {% endif %}
             {% if project.url %}
-            <p class="project-url"><strong>URL:</strong> <a href="{{ project.url }}">{{ project.url | format_url }}</a></p>
+            <div class="project-links">
+                <p class="project-url">
+                    <strong>URL:</strong> 
+                    <a href="{{ project.url }}" rel="external noopener" target="_blank">
+                        {{ project.url | replace('https://', '') | replace('http://', '') }}
+                    </a>
+                </p>
+            </div>
             {% endif %}
-        </div>
+        </article>
         {% endfor %}
     </section>
     {% endif %}
 
+    {# Certifications Section (keeping original until component created) #}
     {% if has_certifications and certifications %}
-    <section class="section certifications">
-        <h2>Certifications</h2>
+    <section class="section certifications-section" aria-labelledby="certifications-heading">
+        <h2 id="certifications-heading" class="section-title">Certifications</h2>
         {% for cert in certifications %}
-        <div class="certification-item">
-            <h3 class="cert-name">{{ cert.name }}</h3>
-            {% if cert.issuer or cert.date %}
-            <p class="cert-meta">
-                {% if cert.issuer %}
-                <span class="cert-issuer">{{ cert.issuer }}</span>
+        <article class="certification-item">
+            <header class="cert-header">
+                <h3 class="cert-name">{{ cert.name }}</h3>
+                {% if cert.issuer or cert.date %}
+                <div class="cert-meta" role="group" aria-label="Certification details">
+                    {% if cert.issuer %}
+                    <span class="cert-issuer">{{ cert.issuer }}</span>
+                    {% endif %}
+                    {% if cert.issuer and cert.date %}
+                    <span class="separator" aria-hidden="true"> - </span>
+                    {% endif %}
+                    {% if cert.date %}
+                    <time class="cert-date" datetime="{{ cert.date }}">{{ cert.date }}</time>
+                    {% endif %}
+                </div>
                 {% endif %}
-                {% if cert.issuer and cert.date %} - {% endif %}
-                {% if cert.date %}
-                <span class="cert-date">{{ cert.date | format_date }}</span>
-                {% endif %}
-            </p>
-            {% endif %}
+            </header>
             {% if cert.url %}
-            <p class="cert-url"><strong>Verification:</strong> <a href="{{ cert.url }}">{{ cert.url | format_url }}</a></p>
+            <div class="cert-verification">
+                <p class="cert-url">
+                    <strong>Verification:</strong> 
+                    <a href="{{ cert.url }}" rel="external noopener" target="_blank">
+                        {{ cert.url | replace('https://', '') | replace('http://', '') }}
+                    </a>
+                </p>
+            </div>
             {% endif %}
-        </div>
+        </article>
         {% endfor %}
     </section>
     {% endif %}
-</body>
-</html>
+{% endblock %}

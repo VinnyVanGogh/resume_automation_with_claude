@@ -1,0 +1,9 @@
+{# Professional summary component #}
+{% if summary %}
+<section class="section summary-section" aria-labelledby="summary-heading">
+    <h2 id="summary-heading" class="section-title">Summary</h2>
+    <div class="summary-content" property="description">
+        <p class="summary-text">{{ summary }}</p>
+    </div>
+</section>
+{% endif %}
