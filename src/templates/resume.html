@@ -3,115 +3,191 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ name }} - Resume</title>
+    <meta name="description" content="{{ meta_description | default('Professional resume') }}">
+    <title>{{ page_title | default(contact.name + ' - Resume') }}</title>
+    {% if config.include_styles %}
+    <link rel="stylesheet" href="styles.css">
+    {% endif %}
+    {% if custom_css %}
     <style>
-        /* ATS-friendly CSS */
-        body {
-            font-family: Arial, sans-serif;
-            font-size: 11pt;
-            line-height: 1.15;
-            margin: 0.5in;
-            color: #000;
-        }
-        
-        h1 {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-        
-        h2 {
-            font-size: 18px;
-            font-weight: bold;
-            margin-top: 20px;
-            margin-bottom: 10px;
-            border-bottom: 1px solid #000;
-            padding-bottom: 2px;
-        }
-        
-        h3 {
-            font-size: 14px;
-            font-weight: bold;
-            margin-top: 15px;
-            margin-bottom: 5px;
-        }
-        
-        .contact-info {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        
-        .contact-info p {
-            margin: 5px 0;
-        }
-        
-        ul {
-            margin: 10px 0;
-            padding-left: 20px;
-        }
-        
-        li {
-            margin: 5px 0;
-        }
-        
-        .date {
-            font-style: italic;
-            color: #555;
-        }
-        
-        .skills {
-            margin: 10px 0;
-        }
-        
-        .skills strong {
-            font-weight: bold;
-        }
-        
-        /* Print optimization */
-        @media print {
-            body {
-                margin: 0.5in;
-            }
-            
-            h1, h2, h3 {
-                page-break-after: avoid;
-            }
-            
-            .section {
-                page-break-inside: avoid;
-            }
-        }
+        {{ custom_css }}
     </style>
+    {% endif %}
 </head>
 <body>
     <header>
-        <h1>{{ name | default("Resume") }}</h1>
+        <h1>{{ contact.name }}</h1>
         <div class="contact-info">
-            {% if email or phone %}
-            <p>
-                {% if email %}{{ email }}{% endif %}
-                {% if email and phone %} | {% endif %}
-                {% if phone %}{{ phone }}{% endif %}
+            {% if contact.email or contact.phone %}
+            <p class="contact-line">
+                {% if contact.email %}
+                <a href="mailto:{{ contact.email }}">{{ contact.email }}</a>
+                {% endif %}
+                {% if contact.email and contact.phone %} | {% endif %}
+                {% if contact.phone %}
+                <a href="tel:{{ contact.phone }}">{{ contact.phone | format_phone }}</a>
+                {% endif %}
             </p>
             {% endif %}
-            {% if linkedin or github %}
-            <p>
-                {% if linkedin %}{{ linkedin }}{% endif %}
-                {% if linkedin and github %} | {% endif %}
-                {% if github %}{{ github }}{% endif %}
+            
+            {% if contact.linkedin or contact.github or contact.website %}
+            <p class="contact-line">
+                {% if contact.linkedin %}
+                <a href="{{ contact.linkedin }}">{{ contact.linkedin | format_url }}</a>
+                {% endif %}
+                {% if contact.linkedin and (contact.github or contact.website) %} | {% endif %}
+                {% if contact.github %}
+                <a href="{{ contact.github }}">{{ contact.github | format_url }}</a>
+                {% endif %}
+                {% if contact.github and contact.website %} | {% endif %}
+                {% if contact.website %}
+                <a href="{{ contact.website }}">{{ contact.website | format_url }}</a>
+                {% endif %}
             </p>
+            {% endif %}
+            
+            {% if contact.location %}
+            <p class="contact-line">{{ contact.location }}</p>
             {% endif %}
         </div>
     </header>
 
-    {% for section_name, section in sections.items() %}
-    <div class="section">
-        <h2>{{ section.title }}</h2>
-        {% for content_item in section.content %}
-        <p>{{ content_item }}</p>
+    {% if has_summary and summary %}
+    <section class="section summary">
+        <h2>Summary</h2>
+        <p>{{ summary }}</p>
+    </section>
+    {% endif %}
+
+    {% if experience %}
+    <section class="section experience">
+        <h2>Experience</h2>
+        {% for exp in experience %}
+        <div class="experience-item">
+            <h3 class="job-title">{{ exp.title }} | <span class="company-name">{{ exp.company }}</span></h3>
+            {% if exp.start_date or exp.location %}
+            <p class="job-meta">
+                {% if exp.start_date %}
+                <span class="job-dates">{{ exp.start_date | format_date }} - {{ exp.end_date | format_date | default('Present') }}</span>
+                {% endif %}
+                {% if exp.start_date and exp.location %} | {% endif %}
+                {% if exp.location %}
+                <span class="job-location">{{ exp.location }}</span>
+                {% endif %}
+            </p>
+            {% endif %}
+            {% if exp.bullets %}
+            <ul class="responsibilities">
+                {% for bullet in exp.bullets %}
+                <li>{{ bullet }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
         {% endfor %}
-    </div>
-    {% endfor %}
+    </section>
+    {% endif %}
+
+    {% if education %}
+    <section class="section education">
+        <h2>Education</h2>
+        {% for edu in education %}
+        <div class="education-item">
+            <h3 class="degree">{{ edu.degree }} | <span class="institution">{{ edu.school }}</span></h3>
+            {% if edu.end_date or edu.graduation_date or edu.location %}
+            <p class="education-meta">
+                {% if edu.end_date or edu.graduation_date %}
+                <span class="education-dates">
+                    {% if edu.start_date %}{{ edu.start_date | format_date }} - {% endif %}
+                    {{ (edu.end_date or edu.graduation_date) | format_date }}
+                </span>
+                {% endif %}
+                {% if (edu.end_date or edu.graduation_date) and edu.location %} | {% endif %}
+                {% if edu.location %}
+                <span class="education-location">{{ edu.location }}</span>
+                {% endif %}
+            </p>
+            {% endif %}
+            {% if edu.gpa %}
+            <p class="gpa">GPA: {{ edu.gpa }}</p>
+            {% endif %}
+            {% if edu.relevant_coursework %}
+            <div class="coursework">
+                <strong>Relevant Coursework:</strong>
+                <ul>
+                    {% for course in edu.relevant_coursework %}
+                    <li>{{ course }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </section>
+    {% endif %}
+
+    {% if skills and (skills.categories or skills.raw_skills) %}
+    <section class="section skills-section">
+        <h2>Skills</h2>
+        {% if skills.categories %}
+        {% for category in skills.categories %}
+        {% if category.skills %}
+        <div class="skills-category">
+            <strong>{{ category.name }}:</strong> {{ category.skills | join(', ') }}
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% elif skills.raw_skills %}
+        <div class="skills-category">
+            {{ skills.raw_skills | join(', ') }}
+        </div>
+        {% endif %}
+    </section>
+    {% endif %}
+
+    {% if has_projects and projects %}
+    <section class="section projects">
+        <h2>Projects</h2>
+        {% for project in projects %}
+        <div class="project-item">
+            <h3 class="project-name">{{ project.name }}</h3>
+            {% if project.technologies %}
+            <p class="project-tech"><strong>Technologies:</strong> {{ project.technologies | join(', ') }}</p>
+            {% endif %}
+            {% if project.description %}
+            <p class="project-description">{{ project.description }}</p>
+            {% endif %}
+            {% if project.url %}
+            <p class="project-url"><strong>URL:</strong> <a href="{{ project.url }}">{{ project.url | format_url }}</a></p>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </section>
+    {% endif %}
+
+    {% if has_certifications and certifications %}
+    <section class="section certifications">
+        <h2>Certifications</h2>
+        {% for cert in certifications %}
+        <div class="certification-item">
+            <h3 class="cert-name">{{ cert.name }}</h3>
+            {% if cert.issuer or cert.date %}
+            <p class="cert-meta">
+                {% if cert.issuer %}
+                <span class="cert-issuer">{{ cert.issuer }}</span>
+                {% endif %}
+                {% if cert.issuer and cert.date %} - {% endif %}
+                {% if cert.date %}
+                <span class="cert-date">{{ cert.date | format_date }}</span>
+                {% endif %}
+            </p>
+            {% endif %}
+            {% if cert.url %}
+            <p class="cert-url"><strong>Verification:</strong> <a href="{{ cert.url }}">{{ cert.url | format_url }}</a></p>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </section>
+    {% endif %}
 </body>
 </html>

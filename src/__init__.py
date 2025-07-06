@@ -9,7 +9,7 @@ __version__ = "0.1.0"
 __author__ = "Resume Automation Team"
 
 from .formatter import ATSFormatter
-from .generator import ResumeGenerator
+from .resume_generator import ResumeGenerator
 from .parser import MarkdownResumeParser
 from .custom_types import (
     ATSComplianceError,

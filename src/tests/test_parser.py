@@ -59,7 +59,7 @@ class TestATSRenderer:
         result = renderer.link('https://linkedin.com/in/user', 'LinkedIn')
         
         assert 'LinkedIn' in result
-        assert 'LinkedIn: https://linkedin.com/in/user' in renderer.current_section_content
+        assert 'https://linkedin.com/in/user: LinkedIn' in renderer.current_section_content
 
     def test_finalize_sections(self):
         """Test section finalization."""

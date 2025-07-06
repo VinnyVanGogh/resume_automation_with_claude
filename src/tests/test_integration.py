@@ -8,7 +8,7 @@ import os
 from src.parser import MarkdownResumeParser
 from src.validation import ResumeValidator
 from src.models import ResumeData
-from src.types import InvalidMarkdownError
+from src.custom_types import InvalidMarkdownError
 
 
 class TestEndToEndParsing:
