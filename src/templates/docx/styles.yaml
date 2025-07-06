@@ -1,0 +1,185 @@
+# DOCX Style Configuration
+# Professional Word document styles for ATS-compliant resumes
+
+# Document Properties
+document:
+  page_size: "Letter"  # Letter, A4, Legal
+  orientation: "portrait"
+  margins:
+    top: 0.75
+    bottom: 0.75
+    left: 0.75
+    right: 0.75
+  
+# Base Font Settings
+fonts:
+  primary: "Arial"
+  secondary: "Calibri"
+  fallback: "Times New Roman"
+  
+# Paragraph Styles
+paragraph_styles:
+  Normal:
+    font_name: "Arial"
+    font_size: 11
+    line_spacing: 1.15
+    space_before: 0
+    space_after: 6
+    alignment: "left"
+    keep_together: false
+    
+  Heading1:
+    # Used for candidate name
+    font_name: "Arial"
+    font_size: 20
+    line_spacing: 1.0
+    space_before: 0
+    space_after: 6
+    alignment: "center"
+    bold: true
+    keep_together: true
+    
+  Heading2:
+    # Used for section headers (Experience, Education, etc.)
+    font_name: "Arial"
+    font_size: 14
+    line_spacing: 1.0
+    space_before: 12
+    space_after: 6
+    alignment: "left"
+    bold: true
+    keep_together: true
+    border_bottom:
+      style: "single"
+      size: 1
+      color: "000000"
+      
+  Heading3:
+    # Used for job titles, degree names
+    font_name: "Arial"
+    font_size: 12
+    line_spacing: 1.0
+    space_before: 8
+    space_after: 4
+    alignment: "left"
+    bold: true
+    keep_together: true
+    
+  BulletList:
+    # Used for experience bullets, skills
+    font_name: "Arial"
+    font_size: 11
+    line_spacing: 1.15
+    space_before: 0
+    space_after: 3
+    alignment: "left"
+    left_indent: 0.25
+    bullet_char: "•"
+    keep_together: false
+    
+  ContactInfo:
+    # Used for contact details under name
+    font_name: "Arial"
+    font_size: 11
+    line_spacing: 1.0
+    space_before: 0
+    space_after: 3
+    alignment: "center"
+    keep_together: true
+    
+  DateLocation:
+    # Used for date ranges and locations
+    font_name: "Arial"
+    font_size: 11
+    line_spacing: 1.0
+    space_before: 0
+    space_after: 4
+    alignment: "left"
+    italic: true
+    keep_together: true
+
+# Character Styles
+character_styles:
+  Strong:
+    bold: true
+    
+  Emphasis:
+    italic: true
+    
+  ContactLink:
+    # For email, phone, LinkedIn, etc.
+    color: "0000FF"
+    underline: false
+    
+  CompanyName:
+    # For company names in experience
+    bold: true
+    
+  SkillCategory:
+    # For skill category names
+    bold: true
+
+# Theme-Specific Overrides
+themes:
+  professional:
+    # Conservative corporate styling
+    colors:
+      primary: "000000"
+      secondary: "333333"
+      accent: "666666"
+    fonts:
+      primary: "Arial"
+    section_spacing: 12
+    
+  modern:
+    # Contemporary styling
+    colors:
+      primary: "2C3E50"
+      secondary: "34495E"
+      accent: "3498DB"
+    fonts:
+      primary: "Calibri"
+    section_spacing: 14
+    
+  minimal:
+    # Clean, simple styling
+    colors:
+      primary: "000000"
+      secondary: "555555"
+      accent: "777777"
+    fonts:
+      primary: "Arial"
+    section_spacing: 10
+    heading2_border: false
+    
+  tech:
+    # Developer-focused styling
+    colors:
+      primary: "1E1E1E"
+      secondary: "2D2D2D"
+      accent: "007ACC"
+    fonts:
+      primary: "Consolas"
+      fallback: "Arial"
+    section_spacing: 12
+
+# ATS Compliance Settings
+ats_compliance:
+  # Ensure ATS-friendly formatting
+  use_simple_fonts: true
+  avoid_graphics: true
+  use_standard_headings: true
+  maintain_reading_order: true
+  avoid_text_boxes: true
+  use_bullet_points: true
+  standard_date_format: true
+  
+# Quality Settings
+quality:
+  # Professional appearance standards
+  consistent_spacing: true
+  proper_alignment: true
+  readable_fonts: true
+  appropriate_font_sizes: true
+  professional_colors: true
+  clean_layout: true

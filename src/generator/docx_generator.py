@@ -2,10 +2,11 @@
 DOCX generator for resume output.
 
 This module provides the DOCXGenerator class for creating professional,
-ATS-compliant Word documents using python-docx.
+ATS-compliant Word documents using python-docx with YAML-based template system.
 """
 
 import logging
+import yaml
 from pathlib import Path
 from typing import Optional, Dict, Any, List
 from docx import Document
@@ -26,18 +27,58 @@ class DOCXGenerator:
     Generate DOCX resume output from structured resume data.
     
     This class uses python-docx to create professional Word documents
-    with ATS-compliant formatting and consistent styling.
+    with ATS-compliant formatting and YAML-based template system.
     """
     
-    def __init__(self, config: Optional[DOCXConfig] = None) -> None:
+    def __init__(self, config: Optional[DOCXConfig] = None, template_name: str = "professional") -> None:
         """
-        Initialize DOCX generator with configuration.
+        Initialize DOCX generator with configuration and template.
         
         Args:
             config: DOCX generation configuration. If None, uses defaults.
+            template_name: Name of the template to use (professional, modern, minimal, tech)
         """
         self.config = config or DOCXConfig()
-        logger.info("DOCXGenerator initialized")
+        self.template_name = template_name
+        self.styles_config = self._load_styles_config()
+        self.template_config = self._load_template_config()
+        logger.info(f"DOCXGenerator initialized with template: {template_name}")
+    
+    def _load_styles_config(self) -> Dict[str, Any]:
+        """
+        Load DOCX styles configuration from YAML file.
+        
+        Returns:
+            Dict containing style configuration
+        """
+        styles_path = Path(__file__).parent.parent / "templates" / "docx" / "styles.yaml"
+        try:
+            with open(styles_path, 'r') as f:
+                return yaml.safe_load(f)
+        except FileNotFoundError:
+            logger.warning(f"Styles config not found at {styles_path}, using defaults")
+            return {}
+        except yaml.YAMLError as e:
+            logger.error(f"Error loading styles config: {e}")
+            return {}
+    
+    def _load_template_config(self) -> Dict[str, Any]:
+        """
+        Load DOCX template configuration from YAML file.
+        
+        Returns:
+            Dict containing template configuration
+        """
+        template_path = Path(__file__).parent.parent / "templates" / "docx" / "templates.yaml"
+        try:
+            with open(template_path, 'r') as f:
+                return yaml.safe_load(f)
+        except FileNotFoundError:
+            logger.warning(f"Template config not found at {template_path}, using defaults")
+            return {}
+        except yaml.YAMLError as e:
+            logger.error(f"Error loading template config: {e}")
+            return {}
     
     def generate(
         self, 
@@ -136,95 +177,113 @@ class DOCXGenerator:
     
     def _configure_document_styles(self, doc: Document) -> None:
         """
-        Configure document-wide styles for professional appearance.
+        Configure document-wide styles using YAML configuration.
         
         Args:
             doc: Document object to configure
         """
         styles = doc.styles
         
+        # Get style configuration for current template theme
+        paragraph_styles = self.styles_config.get('paragraph_styles', {})
+        theme_config = self.styles_config.get('themes', {}).get(self.template_name, {})
+        
         # Configure Normal style
-        normal_style = styles['Normal']
-        normal_font = normal_style.font
-        normal_font.name = self.config.font_name
-        normal_font.size = Pt(self.config.font_size)
+        self._configure_style(styles['Normal'], paragraph_styles.get('Normal', {}), theme_config)
         
-        # Configure paragraph spacing
-        normal_paragraph = normal_style.paragraph_format
-        normal_paragraph.space_after = Pt(6)
-        normal_paragraph.line_spacing = self.config.line_spacing
+        # Configure all heading styles
+        for style_name in ['Heading1', 'Heading2', 'Heading3']:
+            if style_name in paragraph_styles:
+                self._configure_style(styles[style_name.replace('Heading', 'Heading ')], 
+                                    paragraph_styles[style_name], theme_config)
         
-        # Create/modify Heading styles
-        self._configure_heading_styles(styles)
+        # Configure other paragraph styles
+        self._configure_additional_styles(styles, paragraph_styles, theme_config)
     
-    def _configure_heading_styles(self, styles) -> None:
+    def _configure_style(self, style, style_config: Dict[str, Any], theme_config: Dict[str, Any]) -> None:
         """
-        Configure heading styles for sections.
+        Configure a specific style using YAML configuration.
+        
+        Args:
+            style: The style object to configure
+            style_config: Style configuration from YAML
+            theme_config: Theme-specific overrides
+        """
+        if not style_config:
+            return
+            
+        # Apply font settings
+        font = style.font
+        if 'font_name' in style_config:
+            font_name = theme_config.get('fonts', {}).get('primary', style_config['font_name'])
+            font.name = font_name
+        if 'font_size' in style_config:
+            font.size = Pt(style_config['font_size'])
+        if 'bold' in style_config:
+            font.bold = style_config['bold']
+        if 'italic' in style_config:
+            font.italic = style_config['italic']
+            
+        # Apply paragraph formatting
+        paragraph_format = style.paragraph_format
+        if 'line_spacing' in style_config:
+            paragraph_format.line_spacing = style_config['line_spacing']
+        if 'space_before' in style_config:
+            paragraph_format.space_before = Pt(style_config['space_before'])
+        if 'space_after' in style_config:
+            paragraph_format.space_after = Pt(style_config['space_after'])
+        if 'alignment' in style_config:
+            alignment_map = {
+                'left': WD_ALIGN_PARAGRAPH.LEFT,
+                'center': WD_ALIGN_PARAGRAPH.CENTER,
+                'right': WD_ALIGN_PARAGRAPH.RIGHT,
+                'justify': WD_ALIGN_PARAGRAPH.JUSTIFY
+            }
+            paragraph_format.alignment = alignment_map.get(style_config['alignment'], WD_ALIGN_PARAGRAPH.LEFT)
+        if 'left_indent' in style_config:
+            paragraph_format.left_indent = Inches(style_config['left_indent'])
+    
+    def _configure_additional_styles(self, styles, paragraph_styles: Dict[str, Any], theme_config: Dict[str, Any]) -> None:
+        """
+        Configure additional custom styles.
         
         Args:
             styles: Document styles collection
+            paragraph_styles: Paragraph style configuration
+            theme_config: Theme-specific configuration
         """
-        # Heading 1 (Name)
-        h1_style = styles['Heading 1']
-        h1_font = h1_style.font
-        h1_font.name = self.config.font_name
-        h1_font.size = Pt(20)
-        h1_font.bold = True
-        h1_paragraph = h1_style.paragraph_format
-        h1_paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        h1_paragraph.space_after = Pt(6)
-        
-        # Heading 2 (Section headers)
-        h2_style = styles['Heading 2']
-        h2_font = h2_style.font
-        h2_font.name = self.config.font_name
-        h2_font.size = Pt(14)
-        h2_font.bold = True
-        h2_paragraph = h2_style.paragraph_format
-        h2_paragraph.space_before = Pt(self.config.section_spacing)
-        h2_paragraph.space_after = Pt(6)
-        
-        # Add border to Heading 2
-        self._add_heading_border(h2_style)
-        
-        # Heading 3 (Job titles, etc.)
-        h3_style = styles['Heading 3']
-        h3_font = h3_style.font
-        h3_font.name = self.config.font_name
-        h3_font.size = Pt(12)
-        h3_font.bold = True
-        h3_paragraph = h3_style.paragraph_format
-        h3_paragraph.space_before = Pt(8)
-        h3_paragraph.space_after = Pt(4)
-    
-    def _add_heading_border(self, style) -> None:
-        """
-        Add bottom border to heading style.
-        
-        Args:
-            style: Style object to modify
-        """
-        try:
-            # This is a complex operation in python-docx
-            # For simplicity, we'll skip the border for now
-            # In production, you might want to implement this fully
-            pass
-        except Exception as e:
-            logger.warning(f"Could not add heading border: {e}")
+        # Add custom styles that might not exist
+        custom_styles = ['BulletList', 'ContactInfo', 'DateLocation']
+        for style_name in custom_styles:
+            if style_name in paragraph_styles:
+                try:
+                    # Try to get existing style, or create new one
+                    try:
+                        style = styles[style_name]
+                    except KeyError:
+                        # Create new style based on Normal
+                        style = styles.add_style(style_name, WD_STYLE_TYPE.PARAGRAPH)
+                    
+                    self._configure_style(style, paragraph_styles[style_name], theme_config)
+                except Exception as e:
+                    logger.warning(f"Could not configure style {style_name}: {e}")
     
     def _set_page_margins(self, doc: Document) -> None:
         """
-        Set page margins according to configuration.
+        Set page margins according to YAML configuration.
         
         Args:
             doc: Document object to configure
         """
         sections = doc.sections
+        document_config = self.styles_config.get('document', {})
+        margins = document_config.get('margins', {})
+        
         for section in sections:
-            section.top_margin = Inches(self.config.margin_top)
-            section.bottom_margin = Inches(self.config.margin_bottom)
-            section.left_margin = Inches(self.config.margin_left)
-            section.right_margin = Inches(self.config.margin_right)
+            section.top_margin = Inches(margins.get('top', self.config.margin_top))
+            section.bottom_margin = Inches(margins.get('bottom', self.config.margin_bottom))
+            section.left_margin = Inches(margins.get('left', self.config.margin_left))
+            section.right_margin = Inches(margins.get('right', self.config.margin_right))
     
     def _add_header_section(self, doc: Document, resume_data: ResumeData) -> None:
         """
@@ -471,14 +530,15 @@ class DOCXGenerator:
         return True
     
     @classmethod
-    def from_config(cls, config: OutputConfig) -> "DOCXGenerator":
+    def from_config(cls, config: OutputConfig, template_name: str = "professional") -> "DOCXGenerator":
         """
-        Create DOCXGenerator from OutputConfig.
+        Create DOCXGenerator from OutputConfig with template selection.
         
         Args:
             config: Output configuration containing DOCX config
+            template_name: Name of the template to use
             
         Returns:
             DOCXGenerator: Configured generator instance
         """
-        return cls(config.docx)
+        return cls(config.docx, template_name)
