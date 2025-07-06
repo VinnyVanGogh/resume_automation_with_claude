@@ -1,1 +1,4 @@
-"""Template tests package."""
+#!/usr/bin/env python
+"""
+Template tests package.
+"""

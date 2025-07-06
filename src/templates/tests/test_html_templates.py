@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """
 Tests for HTML template integration with the modular CSS architecture.
 
