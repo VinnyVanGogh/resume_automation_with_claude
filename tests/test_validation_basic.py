@@ -43,7 +43,7 @@ class TestBasicValidation:
         # Should validate successfully
         result = validator.validate_resume(resume)
         assert result is not None
-        assert result.is_valid is True
+        assert result.valid is True
     
     def test_validate_phone_number_formats(self) -> None:
         """Test phone number validation."""

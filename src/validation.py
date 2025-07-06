@@ -391,3 +391,26 @@ class ResumeValidator:
             errors=errors,
             warnings=warnings
         )
+        
+    def _check_content_quality(self, content: str) -> float:
+        """
+        Check content quality score based on length and complexity.
+
+        Args:
+            content: Content string to evaluate
+
+        Returns:
+            float: Content quality score (0.0 to 1.0)
+        """
+        if not content.strip():
+            return 0.0
+
+        # Basic length check
+        length_score = min(len(content) / 500, 1.0)
+
+        # Complexity check (simple heuristic: more unique words = better)
+        unique_words = set(content.split())
+        complexity_score = min(len(unique_words) / 100, 1.0)
+
+        # Combine scores (weighted average)
+        return 0.7 * length_score + 0.3 * complexity_score
