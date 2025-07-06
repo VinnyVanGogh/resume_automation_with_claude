@@ -1,20 +1,73 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" vocab="http://schema.org/" typeof="Person">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Professional resume">
+    <meta name="robots" content="index, follow">
+    <meta name="format-detection" content="telephone=yes">
+    <!-- ATS-friendly meta tags -->
+    <meta name="description" content="Professional resume for Test User">
+    <meta name="keywords" content="resume, Test User, professional, career">
+    <meta name="author" content="Test User">
+    <!-- Print optimization -->
+    <meta name="print-color-adjust" content="exact">
     <title>Test User - Resume</title>
+    <!-- Base styles -->
     <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles.css">
+    <!-- Comprehensive structured data for ATS optimization -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Test User",
+        "email": "test@example.com",
+        "telephone": "None",
+        "url": "None",
+        "sameAs": [
+        ],
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "None"
+        },
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "email": "test@example.com",
+            "telephone": "None"
+        },
+        "hasOccupation": [
+        ],
+        "alumniOf": [
+        ],
+        "knowsAbout": [
+        ],
+        "description": "None",
+        "hasCredential": [
+        ],
+        "workExample": [
+        ]
+    }
+    </script>
 </head>
 <body>
-    <header>
-        <h1>Test User</h1>
-        <div class="contact-info">
-            <p class="contact-line">
-                <a href="mailto:test@example.com">test@example.com</a>
-            </p>
+    <!-- Skip navigation for accessibility -->
+    <a href="#main-content" class="sr-only">Skip to main content</a>
+    <!-- Page wrapper for semantic structure -->
+    <div class="page-wrapper">
+        <main id="main-content" role="main" aria-label="Resume content">
+<header class="resume-header" role="banner" property="name">
+    <h1 class="name" property="name">Test User</h1>
+    <div class="contact-info" role="group" aria-label="Contact information">
+        <div class="contact-line primary-contact">
+            <span class="email" property="email">
+                <a href="mailto:test@example.com" aria-label="Email Test User">
+                    <span class="sr-only">Email: </span>test@example.com
+                </a>
+            </span>
         </div>
-    </header>
+    </div>
+</header>
+        </main>
+    </div>
 </body>
 </html>

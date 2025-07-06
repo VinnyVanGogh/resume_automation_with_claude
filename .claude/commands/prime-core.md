@@ -8,10 +8,11 @@ description: Command for priming Claude Code with core knowledge about your proj
 ## Context
 
 1. Use the !`tree` command to get an overview of the project structure.
-2. !`Read(CLAUDE.md)` to understand core principles and guidelines.
-3. !`Read(README.md)` to get an overview of the project purpose and goals.
-4. Read key files in the `@src/` directory to understand the implementation details.
-5. List any additional files that are important to understand the project.
+2. Confirm you're in a virtual environment if the project is Python-based !`echo $VIRTUAL_ENV`. (If not, activate it with !`source venv/bin/activate` !`cenv`.)
+3. !`Read(CLAUDE.md)` to understand core principles and guidelines.
+4. !`Read(README.md)` to get an overview of the project purpose and goals.
+5. Read key files in the `@src/` directory to understand the implementation details.
+6. List any additional files that are important to understand the project.
 
 ## Tasks
 
