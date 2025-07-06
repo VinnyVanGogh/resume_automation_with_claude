@@ -1,0 +1,379 @@
+/* Minimal Theme - Clean, simple aesthetic with maximum readability */
+/* Ultra-clean design focusing on content with minimal visual distractions */
+
+:root {
+    /* Minimal color palette - high contrast, simple */
+    --color-primary: #1a1a1a;
+    --color-secondary: #666;
+    --color-background: #fff;
+    --color-text: #1a1a1a;
+    --color-text-secondary: #666;
+    --color-accent: #1a1a1a;
+    --color-border: #e0e0e0;
+    --color-text-light: #999;
+    --color-highlight: #fafafa;
+    
+    /* Minimal typography - simple and clean */
+    --font-family-main: Georgia, "Times New Roman", serif;
+    --font-family-headings: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --font-size-base: 11pt;
+    --font-size-h1: 24pt;
+    --font-size-h2: 16pt;
+    --font-size-h3: 13pt;
+    --font-size-h4: 11pt;
+    --font-size-small: 10pt;
+    
+    /* Minimal spacing - generous whitespace */
+    --spacing-unit: 8pt;
+    --spacing-small: 4pt;
+    --spacing-medium: 12pt;
+    --spacing-large: 20pt;
+    --spacing-xl: 32pt;
+    
+    /* Comfortable line heights */
+    --line-height-base: 1.5;
+    --line-height-comfortable: 1.6;
+    
+    /* Layout settings */
+    --max-width: 8.5in;
+    --page-padding: 1in;
+    --section-spacing: 32pt;
+}
+
+/* Minimal headings - clean and simple */
+h1 {
+    font-family: var(--font-family-headings);
+    color: var(--color-primary);
+    font-weight: 300;
+    letter-spacing: -1pt;
+    border: none;
+    margin-bottom: 24pt;
+    text-align: left;
+}
+
+h2 {
+    font-family: var(--font-family-headings);
+    color: var(--color-primary);
+    font-weight: 400;
+    border: none;
+    border-bottom: 1pt solid var(--color-border);
+    text-transform: none;
+    margin-top: 32pt;
+    margin-bottom: 16pt;
+    padding-bottom: 8pt;
+}
+
+h3 {
+    font-family: var(--font-family-headings);
+    color: var(--color-primary);
+    font-weight: 500;
+    margin-top: 16pt;
+    margin-bottom: 8pt;
+}
+
+h4 {
+    font-family: var(--font-family-headings);
+    color: var(--color-secondary);
+    font-weight: 400;
+    margin-top: 12pt;
+    margin-bottom: 4pt;
+}
+
+/* Minimal body text */
+body {
+    line-height: var(--line-height-base);
+    padding: var(--page-padding);
+}
+
+/* Clean contact information */
+.contact-info {
+    text-align: left;
+    margin-bottom: 40pt;
+    border-bottom: 1pt solid var(--color-border);
+    padding-bottom: 16pt;
+}
+
+.contact-info p {
+    margin: 4pt 0;
+    color: var(--color-text);
+}
+
+.contact-info a {
+    color: var(--color-text);
+    text-decoration: none;
+    border-bottom: 1pt dotted var(--color-border);
+}
+
+.contact-info a:hover {
+    border-bottom: 1pt solid var(--color-primary);
+}
+
+/* Minimal sections */
+.section {
+    margin-bottom: var(--spacing-xl);
+}
+
+.section-title {
+    font-family: var(--font-family-headings);
+    font-weight: 400;
+    color: var(--color-primary);
+    border-bottom: 1pt solid var(--color-border);
+    padding-bottom: 8pt;
+    margin-bottom: 20pt;
+    text-transform: none;
+}
+
+/* Clean experience layout */
+.experience-item {
+    margin-bottom: 28pt;
+    padding-bottom: 20pt;
+    border-bottom: 1pt dotted var(--color-border);
+}
+
+.experience-item:last-child {
+    border-bottom: none;
+}
+
+.job-title {
+    font-family: var(--font-family-headings);
+    color: var(--color-primary);
+    font-weight: 500;
+    font-size: 13pt;
+    margin-bottom: 4pt;
+}
+
+.company-name {
+    color: var(--color-secondary);
+    font-weight: normal;
+    font-style: italic;
+    font-size: 12pt;
+    margin-bottom: 2pt;
+}
+
+.job-dates {
+    color: var(--color-text-light);
+    font-size: 10pt;
+    font-style: normal;
+    font-weight: normal;
+    margin-bottom: 12pt;
+    text-transform: uppercase;
+    letter-spacing: 0.5pt;
+}
+
+.job-location {
+    color: var(--color-text-light);
+    font-size: 10pt;
+}
+
+/* Simple education layout */
+.education-item {
+    margin-bottom: 20pt;
+    padding-bottom: 16pt;
+    border-bottom: 1pt dotted var(--color-border);
+}
+
+.education-item:last-child {
+    border-bottom: none;
+}
+
+.degree {
+    font-family: var(--font-family-headings);
+    color: var(--color-primary);
+    font-weight: 500;
+    font-size: 12pt;
+}
+
+.institution {
+    color: var(--color-secondary);
+    font-style: italic;
+    margin-bottom: 4pt;
+}
+
+.education-dates {
+    color: var(--color-text-light);
+    font-size: 10pt;
+    font-style: normal;
+    text-transform: uppercase;
+    letter-spacing: 0.5pt;
+}
+
+/* Minimal skills presentation */
+.skills-section {
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.skills-category {
+    margin-bottom: 16pt;
+    line-height: 1.6;
+}
+
+.skills-category strong {
+    font-family: var(--font-family-headings);
+    color: var(--color-primary);
+    font-weight: 500;
+    display: block;
+    margin-bottom: 6pt;
+    font-size: 11pt;
+}
+
+.skills-list {
+    color: var(--color-text);
+    font-weight: normal;
+}
+
+/* Clean projects */
+.project-item {
+    margin-bottom: 24pt;
+    padding-bottom: 16pt;
+    border-bottom: 1pt dotted var(--color-border);
+}
+
+.project-item:last-child {
+    border-bottom: none;
+}
+
+.project-name {
+    font-family: var(--font-family-headings);
+    color: var(--color-primary);
+    font-weight: 500;
+    font-size: 12pt;
+    margin-bottom: 6pt;
+}
+
+.project-tech {
+    color: var(--color-text-light);
+    font-size: 10pt;
+    text-transform: uppercase;
+    letter-spacing: 0.5pt;
+    margin-bottom: 8pt;
+}
+
+.tech-list {
+    color: var(--color-secondary);
+    font-weight: normal;
+}
+
+/* Simple certifications */
+.certification-item {
+    margin-bottom: 16pt;
+    padding-bottom: 12pt;
+    border-bottom: 1pt dotted var(--color-border);
+}
+
+.certification-item:last-child {
+    border-bottom: none;
+}
+
+.cert-name {
+    font-family: var(--font-family-headings);
+    color: var(--color-primary);
+    font-weight: 500;
+}
+
+.cert-issuer {
+    color: var(--color-secondary);
+    font-style: italic;
+}
+
+.cert-date {
+    color: var(--color-text-light);
+    font-size: 10pt;
+    font-style: normal;
+    text-transform: uppercase;
+    letter-spacing: 0.5pt;
+}
+
+/* Minimal links */
+a {
+    color: var(--color-text);
+    text-decoration: none;
+    border-bottom: 1pt dotted var(--color-border);
+}
+
+a:hover {
+    border-bottom: 1pt solid var(--color-primary);
+}
+
+/* Clean summary */
+.summary {
+    margin-bottom: 40pt;
+    padding-bottom: 20pt;
+    border-bottom: 1pt solid var(--color-border);
+}
+
+.summary p {
+    color: var(--color-text);
+    line-height: 1.6;
+    margin-bottom: 16pt;
+    text-align: left;
+}
+
+/* Simple lists */
+ul {
+    margin: 12pt 0;
+    padding-left: 20pt;
+    list-style-type: none;
+}
+
+li {
+    margin: 8pt 0;
+    line-height: 1.5;
+    color: var(--color-text);
+    position: relative;
+}
+
+li::before {
+    content: "—";
+    color: var(--color-text-light);
+    position: absolute;
+    left: -16pt;
+}
+
+/* Minimal emphasis */
+strong, b {
+    color: var(--color-primary);
+    font-weight: 500;
+}
+
+em, i {
+    color: var(--color-secondary);
+    font-style: italic;
+}
+
+/* Responsive minimal design */
+@media screen and (max-width: 8.5in) {
+    body {
+        padding: 0.75in;
+    }
+    
+    h1 {
+        font-size: 20pt;
+    }
+    
+    .section {
+        margin-bottom: 24pt;
+    }
+}
+
+/* Print optimizations for minimal theme */
+@media print {
+    body {
+        padding: 0.75in;
+    }
+    
+    .contact-info,
+    .summary,
+    .experience-item,
+    .education-item,
+    .project-item,
+    .certification-item {
+        border-color: #ccc !important;
+    }
+    
+    a {
+        border: none !important;
+        color: var(--color-text) !important;
+    }
+}

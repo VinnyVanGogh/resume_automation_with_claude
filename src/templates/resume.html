@@ -150,11 +150,11 @@
 {% endif %}
 {% endblock %}
 
-{# Additional styles if needed #}
+{# Theme selection support #}
+{% block theme %}{{ config.theme if config.theme else 'professional' }}{% endblock %}
+
+{# Additional custom styles if needed #}
 {% block styles %}
-{% if config.include_styles %}
-<link rel="stylesheet" href="styles.css">
-{% endif %}
 {% if custom_css %}
 <style>
     {{ custom_css }}

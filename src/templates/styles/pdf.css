@@ -1,0 +1,295 @@
+/* PDF Styles - Web-optimized for programmatic PDF generation (DEFAULT) */
+/* Balances visual appeal for human recruiters with ATS compatibility */
+
+/* Enhanced visual styling for digital viewing */
+:root {
+    /* Override base colors for better visual appeal */
+    --color-primary: #2c3e50;
+    --color-secondary: #34495e;
+    --color-accent: #3498db;
+    --color-text-light: #7f8c8d;
+    --color-border: #ecf0f1;
+}
+
+/* Page setup for PDF generation */
+@page {
+    size: Letter;
+    margin: 0.75in;
+    
+    @top-center {
+        content: none;
+    }
+    
+    @bottom-center {
+        content: none;
+    }
+}
+
+/* Enhanced typography for digital readability */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: var(--color-text);
+    line-height: 1.4;
+}
+
+/* Professional heading styles with subtle color */
+h1 {
+    color: var(--color-primary);
+    border-bottom: 2pt solid var(--color-accent);
+    padding-bottom: 8pt;
+    margin-bottom: 16pt;
+}
+
+h2 {
+    color: var(--color-primary);
+    border-bottom: 1pt solid var(--color-accent);
+    padding-bottom: 4pt;
+    margin-top: 20pt;
+    margin-bottom: 12pt;
+}
+
+h3 {
+    color: var(--color-secondary);
+}
+
+/* Enhanced section styling */
+.section {
+    margin-bottom: 24pt;
+    page-break-inside: avoid;
+}
+
+.section:last-child {
+    margin-bottom: 0;
+}
+
+/* Contact information enhancement */
+.contact-info {
+    background-color: #f8f9fa;
+    padding: 12pt;
+    border-radius: 4pt;
+    border: 1pt solid var(--color-border);
+    margin-bottom: 20pt;
+}
+
+.contact-info a {
+    color: var(--color-accent);
+    text-decoration: none;
+}
+
+.contact-info a:hover {
+    text-decoration: underline;
+}
+
+/* Professional experience styling */
+.experience-item {
+    margin-bottom: 18pt;
+    padding-bottom: 12pt;
+    border-bottom: 0.5pt solid var(--color-border);
+}
+
+.experience-item:last-child {
+    border-bottom: none;
+}
+
+.job-title {
+    color: var(--color-secondary);
+    font-size: 12pt;
+    font-weight: bold;
+}
+
+.company-name {
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+.job-dates {
+    color: var(--color-text-light);
+    font-style: italic;
+    font-size: 10pt;
+}
+
+.job-location {
+    color: var(--color-text-light);
+    font-size: 10pt;
+}
+
+/* Education section styling */
+.education-item {
+    margin-bottom: 14pt;
+    padding-bottom: 8pt;
+    border-bottom: 0.5pt solid var(--color-border);
+}
+
+.education-item:last-child {
+    border-bottom: none;
+}
+
+.degree {
+    color: var(--color-secondary);
+    font-weight: bold;
+}
+
+.institution {
+    color: var(--color-primary);
+    font-weight: 500;
+}
+
+.education-dates {
+    color: var(--color-text-light);
+    font-style: italic;
+}
+
+/* Skills section with professional styling */
+.skills-section {
+    background-color: #f8f9fa;
+    padding: 12pt;
+    border-radius: 4pt;
+    border: 1pt solid var(--color-border);
+}
+
+.skills-category {
+    margin-bottom: 10pt;
+}
+
+.skills-category:last-child {
+    margin-bottom: 0;
+}
+
+.skills-category strong {
+    color: var(--color-secondary);
+    font-weight: 600;
+    display: inline-block;
+    min-width: 120pt;
+}
+
+/* Enhanced bullet points */
+ul li {
+    position: relative;
+    padding-left: 4pt;
+}
+
+ul li::marker {
+    color: var(--color-accent);
+    font-weight: bold;
+}
+
+/* Professional projects styling */
+.project-item {
+    margin-bottom: 16pt;
+    padding: 12pt;
+    border: 1pt solid var(--color-border);
+    border-radius: 4pt;
+    background-color: #fdfdfd;
+}
+
+.project-name {
+    color: var(--color-secondary);
+    font-weight: bold;
+    margin-bottom: 6pt;
+}
+
+.project-tech {
+    color: var(--color-text-light);
+    font-size: 10pt;
+    margin-bottom: 8pt;
+}
+
+.tech-list {
+    color: var(--color-accent);
+    font-weight: 500;
+}
+
+/* Certifications styling */
+.certification-item {
+    margin-bottom: 12pt;
+    padding: 8pt;
+    border-left: 3pt solid var(--color-accent);
+    background-color: #f8f9fa;
+    padding-left: 12pt;
+}
+
+.cert-name {
+    color: var(--color-secondary);
+    font-weight: bold;
+}
+
+.cert-issuer {
+    color: var(--color-primary);
+    font-weight: 500;
+}
+
+.cert-date {
+    color: var(--color-text-light);
+    font-style: italic;
+}
+
+/* Links styling for digital viewing */
+a {
+    color: var(--color-accent);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: var(--color-secondary);
+    text-decoration: underline;
+}
+
+/* Ensure good contrast for ATS parsing */
+strong, b {
+    color: var(--color-secondary);
+    font-weight: 600;
+}
+
+/* Page break controls for multi-page resumes */
+h1, h2, h3 {
+    page-break-after: avoid;
+    orphans: 3;
+    widows: 3;
+}
+
+.experience-item,
+.education-item,
+.project-item,
+.certification-item {
+    page-break-inside: avoid;
+    orphans: 2;
+    widows: 2;
+}
+
+/* Optimize spacing for visual appeal */
+.summary p {
+    text-align: justify;
+    line-height: 1.5;
+    margin-bottom: 10pt;
+}
+
+/* Professional summary enhancement */
+.summary {
+    background-color: #f8f9fa;
+    padding: 12pt;
+    border-radius: 4pt;
+    border-left: 4pt solid var(--color-accent);
+    margin-bottom: 20pt;
+}
+
+/* Maintain ATS compatibility while enhancing visuals */
+* {
+    /* Ensure text remains selectable and parseable */
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+}
+
+/* Remove any potential ATS parsing issues */
+table, img, canvas, svg {
+    display: none;
+}
+
+/* Ensure consistent text rendering */
+body, h1, h2, h3, h4, p, li {
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}

@@ -1,0 +1,263 @@
+/* Component Styles - Specific styling for resume components */
+
+/* Contact Information Component */
+.contact-info {
+    text-align: center;
+    margin-bottom: 20pt;
+    font-size: var(--font-size-base);
+}
+
+.contact-info p {
+    margin: var(--spacing-unit) 0;
+    line-height: var(--line-height-comfortable);
+}
+
+.contact-info .contact-line {
+    margin: var(--spacing-small) 0;
+}
+
+/* Summary Component */
+.summary {
+    margin-bottom: var(--spacing-large);
+}
+
+.summary p {
+    text-align: justify;
+    margin-bottom: var(--spacing-medium);
+    line-height: var(--line-height-comfortable);
+}
+
+/* Experience Component */
+.experience-item {
+    margin-bottom: 14pt;
+    page-break-inside: avoid;
+}
+
+.job-title {
+    font-weight: bold;
+    font-size: var(--font-size-h3);
+}
+
+.company-name {
+    font-weight: bold;
+    font-size: var(--font-size-base);
+}
+
+.job-dates {
+    font-style: italic;
+    color: var(--color-secondary);
+    font-size: var(--font-size-small);
+    margin-bottom: 6pt;
+}
+
+.job-location {
+    color: var(--color-secondary);
+    font-size: var(--font-size-small);
+}
+
+/* Education Component */
+.education-item {
+    margin-bottom: 10pt;
+}
+
+.degree {
+    font-weight: bold;
+    font-size: var(--font-size-base);
+}
+
+.institution {
+    font-size: var(--font-size-base);
+    margin-bottom: var(--spacing-small);
+}
+
+.education-dates {
+    font-style: italic;
+    color: var(--color-secondary);
+    font-size: var(--font-size-small);
+}
+
+/* Skills Component */
+.skills-section {
+    margin-bottom: var(--spacing-large);
+}
+
+.skills-category {
+    margin-bottom: var(--spacing-medium);
+}
+
+.skills-category strong {
+    font-weight: bold;
+    display: inline-block;
+    min-width: 100pt;
+}
+
+.skills-list {
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
+
+/* Projects Component */
+.projects-section {
+    margin-bottom: var(--spacing-large);
+}
+
+.project-item {
+    margin-bottom: 10pt;
+}
+
+.project-name {
+    font-weight: bold;
+    font-size: var(--font-size-base);
+}
+
+.project-description {
+    margin-top: var(--spacing-unit);
+}
+
+.project-header {
+    margin-bottom: var(--spacing-unit);
+}
+
+.project-tech {
+    font-size: var(--font-size-small);
+    color: var(--color-secondary);
+    margin-bottom: var(--spacing-unit);
+}
+
+.tech-list {
+    font-weight: normal;
+}
+
+.project-content {
+    margin-bottom: var(--spacing-unit);
+}
+
+.project-links {
+    margin-top: var(--spacing-unit);
+}
+
+.project-url {
+    font-size: var(--font-size-small);
+}
+
+/* Certifications Component */
+.certifications-section {
+    margin-bottom: var(--spacing-large);
+}
+
+.certification-item {
+    margin-bottom: 6pt;
+}
+
+.cert-name {
+    font-weight: bold;
+    font-size: var(--font-size-base);
+}
+
+.cert-issuer {
+    color: var(--color-secondary);
+    font-size: var(--font-size-base);
+}
+
+.cert-date {
+    font-style: italic;
+    color: var(--color-secondary);
+    font-size: var(--font-size-small);
+}
+
+.cert-header {
+    margin-bottom: var(--spacing-unit);
+}
+
+.cert-meta {
+    margin-top: var(--spacing-small);
+}
+
+.cert-verification {
+    margin-top: var(--spacing-unit);
+}
+
+.cert-url {
+    font-size: var(--font-size-small);
+}
+
+.separator {
+    margin: 0 var(--spacing-small);
+}
+
+/* Section Base Styling */
+.section {
+    margin-bottom: var(--section-spacing);
+    page-break-inside: avoid;
+}
+
+.section:last-child {
+    margin-bottom: 0;
+}
+
+.section-title {
+    font-size: var(--font-size-h2);
+    font-weight: bold;
+    margin-top: var(--spacing-large);
+    margin-bottom: var(--spacing-medium);
+    border-bottom: 1pt solid var(--color-primary);
+    padding-bottom: var(--spacing-small);
+    text-transform: uppercase;
+    font-family: var(--font-family-headings);
+}
+
+/* Component responsiveness */
+@media screen and (max-width: 8.5in) {
+    .skills-category strong {
+        min-width: 80pt;
+    }
+    
+    .contact-info {
+        font-size: 10pt;
+    }
+}
+
+/* Component accessibility enhancements */
+.experience-item,
+.education-item,
+.project-item,
+.certification-item {
+    position: relative;
+}
+
+/* Focus states for interactive elements within components */
+.project-item a:focus,
+.certification-item a:focus,
+.contact-info a:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* Print-specific component adjustments */
+@media print {
+    .experience-item,
+    .education-item,
+    .skills-category,
+    .project-item,
+    .certification-item {
+        page-break-inside: avoid;
+    }
+    
+    .section {
+        margin-bottom: 18pt;
+    }
+    
+    .compact {
+        margin-bottom: 12pt;
+    }
+    
+    .compact .section-title {
+        margin-top: 12pt;
+        margin-bottom: 6pt;
+    }
+    
+    .compact .experience-item {
+        margin-bottom: 10pt;
+    }
+}
