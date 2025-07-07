@@ -1,0 +1,172 @@
+/* Base Styles - Core typography, reset, variables, and base elements */
+
+/* CSS Custom Properties for theming */
+:root {
+    /* Colors */
+    --color-primary: #000;
+    --color-secondary: #333;
+    --color-background: #fff;
+    --color-text: #000;
+    --color-text-secondary: #333;
+    
+    /* Typography */
+    --font-family-main: Arial, sans-serif;
+    --font-family-headings: Arial, sans-serif;
+    --font-size-base: 11pt;
+    --font-size-h1: 20pt;
+    --font-size-h2: 14pt;
+    --font-size-h3: 12pt;
+    --font-size-h4: 11pt;
+    --font-size-small: 10pt;
+    
+    /* Spacing */
+    --spacing-unit: 4pt;
+    --spacing-small: 2pt;
+    --spacing-medium: 8pt;
+    --spacing-large: 16pt;
+    --spacing-xl: 20pt;
+    
+    /* Line heights */
+    --line-height-base: 1.2;
+    --line-height-comfortable: 1.3;
+    
+    /* Layout */
+    --max-width: 8.5in;
+    --page-padding: 0.75in;
+    --section-spacing: var(--spacing-xl);
+}
+
+/* CSS Reset for consistency */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Base document styles */
+body {
+    font-family: var(--font-family-main);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-base);
+    color: var(--color-text);
+    background: var(--color-background);
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: var(--page-padding);
+}
+
+/* Typography hierarchy optimized for ATS parsing */
+h1 {
+    font-size: var(--font-size-h1);
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: var(--spacing-medium);
+    letter-spacing: 0.5pt;
+    font-family: var(--font-family-headings);
+}
+
+h2 {
+    font-size: var(--font-size-h2);
+    font-weight: bold;
+    margin-top: var(--spacing-large);
+    margin-bottom: var(--spacing-medium);
+    border-bottom: 1pt solid var(--color-primary);
+    padding-bottom: var(--spacing-small);
+    text-transform: uppercase;
+    font-family: var(--font-family-headings);
+}
+
+h3 {
+    font-size: var(--font-size-h3);
+    font-weight: bold;
+    margin-top: 10pt;
+    margin-bottom: var(--spacing-unit);
+    font-family: var(--font-family-headings);
+}
+
+h4 {
+    font-size: var(--font-size-h4);
+    font-weight: bold;
+    margin-top: 6pt;
+    margin-bottom: var(--spacing-small);
+    font-family: var(--font-family-headings);
+}
+
+/* Paragraphs */
+p {
+    margin: 6pt 0;
+    line-height: var(--line-height-comfortable);
+    text-align: left;
+}
+
+/* Lists - ATS-friendly bullet points */
+ul {
+    margin: var(--spacing-medium) 0;
+    padding-left: 18pt;
+    list-style-type: disc;
+}
+
+li {
+    margin: var(--spacing-unit) 0;
+    line-height: var(--line-height-comfortable);
+    text-align: justify;
+}
+
+/* No nested lists for ATS compatibility */
+ul ul {
+    margin: var(--spacing-small) 0;
+    padding-left: 15pt;
+}
+
+/* Text emphasis */
+strong, b {
+    font-weight: bold;
+}
+
+em, i {
+    font-style: italic;
+}
+
+/* Links - maintain readability in PDF */
+a {
+    color: var(--color-text);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Tables (use sparingly for ATS compatibility) */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: var(--spacing-medium) 0;
+}
+
+td, th {
+    padding: var(--spacing-unit) var(--spacing-medium);
+    text-align: left;
+    vertical-align: top;
+    border: none;
+}
+
+/* Accessibility improvements */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Responsive adjustments for different page sizes */
+@media screen and (max-width: 8.5in) {
+    body {
+        padding: 0.5in;
+    }
+}

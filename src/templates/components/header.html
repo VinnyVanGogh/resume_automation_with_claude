@@ -1,0 +1,87 @@
+{# Header component with contact information #}
+<header class="resume-header" role="banner" property="name">
+    <h1 class="name" property="name">{{ contact.name }}</h1>
+    
+    <div class="contact-info" role="group" aria-label="Contact information">
+        {% if contact.email or contact.phone %}
+        <div class="contact-line primary-contact">
+            {% if contact.email %}
+            <span class="email" property="email">
+                <a href="mailto:{{ contact.email }}" aria-label="Email {{ contact.name }}">
+                    <span class="sr-only">Email: </span>{{ contact.email }}
+                </a>
+            </span>
+            {% endif %}
+            
+            {% if contact.email and contact.phone %}
+            <span class="separator" aria-hidden="true"> | </span>
+            {% endif %}
+            
+            {% if contact.phone %}
+            <span class="phone" property="telephone">
+                <a href="tel:{{ contact.phone | replace(' ', '') | replace('-', '') | replace('(', '') | replace(')', '') }}" 
+                   aria-label="Call {{ contact.name }}">
+                    <span class="sr-only">Phone: </span>{{ contact.phone }}
+                </a>
+            </span>
+            {% endif %}
+        </div>
+        {% endif %}
+        
+        {% if contact.linkedin or contact.github or contact.website %}
+        <div class="contact-line social-links">
+            {% if contact.linkedin %}
+            <span class="linkedin">
+                <a href="{{ contact.linkedin }}" 
+                   rel="external noopener" 
+                   target="_blank" 
+                   aria-label="LinkedIn profile"
+                   property="sameAs">
+                    <span class="sr-only">LinkedIn: </span>{{ contact.linkedin | replace('https://', '') | replace('http://', '') }}
+                </a>
+            </span>
+            {% endif %}
+            
+            {% if contact.linkedin and (contact.github or contact.website) %}
+            <span class="separator" aria-hidden="true"> | </span>
+            {% endif %}
+            
+            {% if contact.github %}
+            <span class="github">
+                <a href="{{ contact.github }}" 
+                   rel="external noopener" 
+                   target="_blank" 
+                   aria-label="GitHub profile"
+                   property="sameAs">
+                    <span class="sr-only">GitHub: </span>{{ contact.github | replace('https://', '') | replace('http://', '') }}
+                </a>
+            </span>
+            {% endif %}
+            
+            {% if contact.github and contact.website %}
+            <span class="separator" aria-hidden="true"> | </span>
+            {% endif %}
+            
+            {% if contact.website %}
+            <span class="website">
+                <a href="{{ contact.website }}" 
+                   rel="external noopener" 
+                   target="_blank" 
+                   aria-label="Personal website"
+                   property="url">
+                    <span class="sr-only">Website: </span>{{ contact.website | replace('https://', '') | replace('http://', '') }}
+                </a>
+            </span>
+            {% endif %}
+        </div>
+        {% endif %}
+        
+        {% if contact.location %}
+        <div class="contact-line location">
+            <span class="location" property="address">
+                <span class="sr-only">Location: </span>{{ contact.location }}
+            </span>
+        </div>
+        {% endif %}
+    </div>
+</header>

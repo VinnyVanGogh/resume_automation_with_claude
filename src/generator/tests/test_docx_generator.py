@@ -156,24 +156,25 @@ class TestDOCXGenerator:
             font_name="Times New Roman",
             font_size=12,
             line_spacing=1.15,
-            ats_optimized=True
+            template_name="modern"
         )
         
-        generator = DOCXGenerator(custom_config)
+        generator = DOCXGenerator(custom_config, template_name="modern")
         docx_bytes = generator.generate(self.sample_resume)
         
         assert isinstance(docx_bytes, bytes)
         assert docx_bytes.startswith(b'PK')  # ZIP header
     
-    def test_ats_optimization(self):
-        """Test ATS optimization features."""
-        ats_config = DOCXConfig(ats_optimized=True)
-        generator = DOCXGenerator(ats_config)
+    def test_template_selection(self):
+        """Test template selection functionality."""
+        templates = ['professional', 'modern', 'minimal', 'tech']
         
-        docx_bytes = generator.generate(self.sample_resume)
-        
-        assert isinstance(docx_bytes, bytes)
-        assert generator.validate_output(docx_bytes) is True
+        for template in templates:
+            generator = DOCXGenerator(template_name=template)
+            docx_bytes = generator.generate(self.sample_resume)
+            
+            assert isinstance(docx_bytes, bytes)
+            assert generator.validate_output(docx_bytes) is True
     
     def test_document_properties_setting(self):
         """Test that document properties are set correctly."""
@@ -198,10 +199,21 @@ class TestDOCXGenerator:
         from src.generator.config import OutputConfig
         
         output_config = OutputConfig()
-        generator = DOCXGenerator.from_config(output_config)
+        generator = DOCXGenerator.from_config(output_config, template_name="professional")
         
         assert isinstance(generator, DOCXGenerator)
         assert generator.config == output_config.docx
+        assert generator.template_name == "professional"
+    
+    def test_yaml_config_loading(self):
+        """Test that YAML configuration files are loaded."""
+        generator = DOCXGenerator(template_name="professional")
+        
+        # Should have loaded configuration
+        assert hasattr(generator, 'styles_config')
+        assert hasattr(generator, 'template_config')
+        assert isinstance(generator.styles_config, dict)
+        assert isinstance(generator.template_config, dict)
     
     def test_directory_creation_for_output(self):
         """Test that output directories are created if they don't exist."""

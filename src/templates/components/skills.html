@@ -1,0 +1,30 @@
+{# Skills component #}
+{% if skills and (skills.categories or skills.raw_skills) %}
+<section class="section skills-section" aria-labelledby="skills-heading">
+    <h2 id="skills-heading" class="section-title">Skills</h2>
+    
+    {% if skills.categories %}
+    <div class="skills-categories">
+        {% for category in skills.categories %}
+        {% if category.skills %}
+        <div class="skills-category" role="group" aria-labelledby="category-{{ loop.index }}">
+            <h3 id="category-{{ loop.index }}" class="category-name">{{ category.name }}:</h3>
+            <div class="skills-list" property="knowsAbout">
+                {% for skill in category.skills %}
+                <span class="skill-item" property="knowsAbout">{{ skill }}</span>{% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+    
+    {% elif skills.raw_skills %}
+    <div class="skills-list" property="knowsAbout">
+        {% for skill in skills.raw_skills %}
+        <span class="skill-item" property="knowsAbout">{{ skill }}</span>{% if not loop.last %}, {% endif %}
+        {% endfor %}
+    </div>
+    {% endif %}
+</section>
+{% endif %}

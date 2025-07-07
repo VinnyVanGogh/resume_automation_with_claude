@@ -59,18 +59,20 @@ class DOCXConfig(BaseModel):
     Configuration for DOCX output generation.
     
     Attributes:
-        style_template: Style template to use (professional, modern, classic)
-        font_name: Primary font name
-        font_size: Base font size in points
-        line_spacing: Line spacing multiplier
-        margin_top: Top margin in inches
-        margin_bottom: Bottom margin in inches
-        margin_left: Left margin in inches
-        margin_right: Right margin in inches
-        section_spacing: Spacing between sections in points
+        template_name: Template name to use (professional, modern, minimal, tech)
+        style_template: Style template to use (professional, modern, classic) - deprecated, use template_name
+        font_name: Primary font name (fallback when YAML config not available)
+        font_size: Base font size in points (fallback when YAML config not available)
+        line_spacing: Line spacing multiplier (fallback when YAML config not available)
+        margin_top: Top margin in inches (fallback when YAML config not available)
+        margin_bottom: Bottom margin in inches (fallback when YAML config not available)
+        margin_left: Left margin in inches (fallback when YAML config not available)
+        margin_right: Right margin in inches (fallback when YAML config not available)
+        section_spacing: Spacing between sections in points (fallback when YAML config not available)
     """
     
-    style_template: str = Field(default="professional", description="Style template")
+    template_name: str = Field(default="professional", description="Template name (professional, modern, minimal, tech)")
+    style_template: str = Field(default="professional", description="Style template (deprecated, use template_name)")
     font_name: str = Field(default="Arial", description="Primary font name")
     font_size: int = Field(default=11, description="Base font size in points")
     line_spacing: float = Field(default=1.15, description="Line spacing multiplier")

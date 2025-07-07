@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """
 HTML generator for resume output.
 

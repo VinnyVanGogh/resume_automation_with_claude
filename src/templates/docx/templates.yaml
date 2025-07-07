@@ -1,0 +1,320 @@
+# DOCX Template Configuration
+# Professional Word document templates for resume generation
+
+# Template Metadata
+metadata:
+  version: "1.0"
+  created_date: "2024-12-06"
+  description: "Professional ATS-compliant DOCX resume templates"
+  author: "Resume Automation Tool"
+
+# Default Template Settings
+defaults:
+  theme: "professional"
+  include_sections:
+    - "header"
+    - "summary"
+    - "experience"
+    - "education"
+    - "skills"
+  optional_sections:
+    - "projects"
+    - "certifications"
+    - "additional_sections"
+
+# Template Definitions
+templates:
+  professional:
+    name: "Professional"
+    description: "Traditional corporate resume format"
+    theme: "professional"
+    layout:
+      header:
+        style: "centered"
+        include_photo: false
+        contact_layout: "stacked"
+        name_prominence: "high"
+      sections:
+        order:
+          - "header"
+          - "summary"
+          - "experience"
+          - "education"
+          - "skills"
+          - "projects"
+          - "certifications"
+        spacing: "standard"
+        bullet_style: "traditional"
+      formatting:
+        date_format: "MMM YYYY"
+        location_display: "after_date"
+        company_emphasis: "bold"
+        title_emphasis: "bold"
+        
+  modern:
+    name: "Modern"
+    description: "Contemporary resume with clean design"
+    theme: "modern"
+    layout:
+      header:
+        style: "left_aligned"
+        include_photo: false
+        contact_layout: "inline"
+        name_prominence: "high"
+      sections:
+        order:
+          - "header"
+          - "summary"
+          - "experience"
+          - "skills"
+          - "education"
+          - "projects"
+          - "certifications"
+        spacing: "relaxed"
+        bullet_style: "modern"
+      formatting:
+        date_format: "MM/YYYY"
+        location_display: "inline"
+        company_emphasis: "bold"
+        title_emphasis: "bold_italic"
+        
+  minimal:
+    name: "Minimal"
+    description: "Clean, simple resume format"
+    theme: "minimal"
+    layout:
+      header:
+        style: "centered"
+        include_photo: false
+        contact_layout: "inline"
+        name_prominence: "medium"
+      sections:
+        order:
+          - "header"
+          - "experience"
+          - "education"
+          - "skills"
+          - "projects"
+        spacing: "compact"
+        bullet_style: "minimal"
+      formatting:
+        date_format: "YYYY"
+        location_display: "omit"
+        company_emphasis: "normal"
+        title_emphasis: "bold"
+        
+  tech:
+    name: "Tech"
+    description: "Developer-focused resume format"
+    theme: "tech"
+    layout:
+      header:
+        style: "left_aligned"
+        include_photo: false
+        contact_layout: "technical"
+        name_prominence: "high"
+      sections:
+        order:
+          - "header"
+          - "summary"
+          - "skills"
+          - "experience"
+          - "projects"
+          - "education"
+          - "certifications"
+        spacing: "standard"
+        bullet_style: "technical"
+      formatting:
+        date_format: "MMM YYYY"
+        location_display: "inline"
+        company_emphasis: "bold"
+        title_emphasis: "bold"
+
+# Section Configuration
+sections:
+  header:
+    required: true
+    components:
+      - "name"
+      - "contact_info"
+    contact_info:
+      order:
+        - "email"
+        - "phone"
+        - "linkedin"
+        - "github"
+        - "website"
+        - "location"
+      separator: " | "
+      
+  summary:
+    required: false
+    title: "Summary"
+    alternative_titles:
+      - "Professional Summary"
+      - "Profile"
+      - "Objective"
+    max_length: 500
+    
+  experience:
+    required: true
+    title: "Experience"
+    alternative_titles:
+      - "Work Experience"
+      - "Professional Experience"
+      - "Employment History"
+    entry_format:
+      title_company: "{title} | {company}"
+      date_location: "{start_date} - {end_date} | {location}"
+      bullets:
+        prefix: "• "
+        max_bullets: 8
+        
+  education:
+    required: true
+    title: "Education"
+    entry_format:
+      degree_school: "{degree} | {school}"
+      date_location: "{start_date} - {end_date} | {location}"
+      include_gpa: true
+      gpa_threshold: 3.5
+      
+  skills:
+    required: true
+    title: "Skills"
+    alternative_titles:
+      - "Technical Skills"
+      - "Core Competencies"
+    format_options:
+      - "categorized"
+      - "bullet_list"
+      - "comma_separated"
+    default_format: "categorized"
+    
+  projects:
+    required: false
+    title: "Projects"
+    alternative_titles:
+      - "Key Projects"
+      - "Notable Projects"
+    entry_format:
+      include_technologies: true
+      include_url: true
+      max_projects: 5
+      
+  certifications:
+    required: false
+    title: "Certifications"
+    entry_format:
+      include_issuer: true
+      include_date: true
+      include_expiry: true
+      include_credential_id: false
+
+# Formatting Rules
+formatting:
+  dates:
+    formats:
+      "MMM YYYY": "%b %Y"
+      "MM/YYYY": "%m/%Y"
+      "YYYY": "%Y"
+      "Month Year": "%B %Y"
+    present_indicators:
+      - "Present"
+      - "Current"
+      - "Now"
+      
+  bullet_styles:
+    traditional:
+      character: "•"
+      indent: 0.25
+      hanging_indent: 0.25
+    modern:
+      character: "▸"
+      indent: 0.2
+      hanging_indent: 0.2
+    minimal:
+      character: "−"
+      indent: 0.15
+      hanging_indent: 0.15
+    technical:
+      character: "►"
+      indent: 0.3
+      hanging_indent: 0.3
+      
+  emphasis:
+    bold: true
+    italic: true
+    underline: false
+    color: false
+    
+  spacing:
+    standard:
+      section_spacing: 12
+      subsection_spacing: 8
+      paragraph_spacing: 6
+    relaxed:
+      section_spacing: 16
+      subsection_spacing: 10
+      paragraph_spacing: 8
+    compact:
+      section_spacing: 8
+      subsection_spacing: 6
+      paragraph_spacing: 4
+
+# ATS Optimization Rules
+ats_optimization:
+  # Font requirements
+  fonts:
+    allowed:
+      - "Arial"
+      - "Calibri"
+      - "Times New Roman"
+      - "Helvetica"
+    avoid:
+      - "Comic Sans"
+      - "Papyrus"
+      - "Decorative fonts"
+      
+  # Structure requirements
+  structure:
+    use_standard_headings: true
+    maintain_reading_order: true
+    avoid_text_boxes: true
+    avoid_graphics: true
+    use_simple_tables: true
+    
+  # Content requirements
+  content:
+    include_keywords: true
+    use_standard_job_titles: true
+    spell_out_abbreviations: true
+    use_action_verbs: true
+    quantify_achievements: true
+    
+  # Formatting requirements
+  formatting:
+    consistent_formatting: true
+    readable_font_sizes: true
+    sufficient_white_space: true
+    logical_section_order: true
+    clear_section_headers: true
+
+# Quality Assurance Rules
+quality_assurance:
+  # Professional standards
+  professional_appearance: true
+  consistent_styling: true
+  proper_grammar: true
+  appropriate_length: true
+  
+  # Technical validation
+  validate_yaml: true
+  validate_styles: true
+  validate_structure: true
+  validate_content: true
+  
+  # Performance standards
+  generation_speed: "< 2 seconds"
+  file_size: "< 1MB"
+  compatibility: "Word 2016+"

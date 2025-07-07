@@ -25,6 +25,15 @@ class TestModels:
         assert contact.name == "John Doe"
         assert contact.email == "john@example.com"
     
+    def test_contact_info_phone_validation_error(self) -> None:
+        """Test ContactInfo phone validation error."""
+        with pytest.raises(ValueError, match="Phone number must be between 10-15 digits"):
+            ContactInfo(
+                name="John Doe",
+                email="john@example.com",
+                phone="123"  # Too short
+            )
+    
     def test_skills_has_skills_method(self) -> None:
         """Test Skills.has_skills method."""
         # Skills with categories

@@ -227,9 +227,65 @@ class TestHTMLGenerator:
         
         html_content = self.generator.generate(skills_resume)
         
+        assert "Technical" in html_content
+        assert "Python" in html_content
+        assert "JavaScript" in html_content
+        assert "Leadership" in html_content
+    
+    def test_html_generator_error_handling(self):
+        """Test HTML generator error handling."""
+        # Test with invalid config
+        generator = HTMLGenerator()
+        generator.config.theme = "nonexistent_theme"
+        
+        # Should still generate HTML (fallback to default)
+        html_content = generator.generate(self.sample_resume)
+        assert len(html_content) > 0
+    
+    def test_html_generator_custom_css_injection(self):
+        """Test custom CSS injection."""
+        generator = HTMLGenerator()
+        custom_css = "body { background-color: red; }"
+        generator.config.custom_css = custom_css
+        
+        html_content = generator.generate(self.sample_resume)
+        assert custom_css in html_content
+    
+    def test_html_generator_accessibility_features(self):
+        """Test accessibility features in generated HTML."""
+        html_content = self.generator.generate(self.sample_resume)
+        
+        # Check for accessibility landmarks
+        assert 'role="main"' in html_content
+        assert 'aria-label' in html_content
+        assert 'Skip to main content' in html_content
+    
+    def test_html_generator_theme_application(self):
+        """Test that different themes are applied correctly."""
+        themes = ["professional", "modern", "minimal", "tech"]
+        
+        for theme in themes:
+            generator = HTMLGenerator()
+            generator.config.theme = theme
+            html_content = generator.generate(self.sample_resume)
+            
+            assert f"styles/themes/{theme}.css" in html_content
+    
+    def test_html_generator_with_file_output(self, tmp_path):
+        """Test HTML generator file output."""
+        output_path = tmp_path / "test_resume.html"
+        html_content = self.generator.generate(self.sample_resume, output_path)
+        
+        # Check file was created
+        assert output_path.exists()
+        
+        # Check content matches
+        file_content = output_path.read_text()
+        assert file_content == html_content
+        
         # Basic HTML structure validation
         assert "<!DOCTYPE html>" in html_content
-        assert "Test User" in html_content
+        assert "John Doe" in html_content  # Use the actual sample resume name
     
     def test_template_not_found_error(self):
         """Test handling of missing template file."""

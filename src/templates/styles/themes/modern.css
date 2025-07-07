@@ -1,0 +1,368 @@
+/* Modern Theme - Contemporary design with subtle colors and updated typography */
+/* Maintains ATS compliance while adding visual appeal for human reviewers */
+
+:root {
+    /* Modern color palette - professional but contemporary */
+    --color-primary: #2c3e50;
+    --color-secondary: #34495e;
+    --color-background: #fff;
+    --color-text: #2c3e50;
+    --color-text-secondary: #7f8c8d;
+    --color-accent: #3498db;
+    --color-border: #bdc3c7;
+    --color-text-light: #95a5a6;
+    --color-highlight: #ecf0f1;
+    
+    /* Modern typography - system fonts for better rendering */
+    --font-family-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-family-headings: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-size-base: 11pt;
+    --font-size-h1: 22pt;
+    --font-size-h2: 16pt;
+    --font-size-h3: 13pt;
+    --font-size-h4: 11pt;
+    --font-size-small: 10pt;
+    
+    /* Modern spacing - slightly more generous */
+    --spacing-unit: 6pt;
+    --spacing-small: 3pt;
+    --spacing-medium: 10pt;
+    --spacing-large: 18pt;
+    --spacing-xl: 24pt;
+    
+    /* Improved readability */
+    --line-height-base: 1.4;
+    --line-height-comfortable: 1.5;
+    
+    /* Layout settings */
+    --max-width: 8.5in;
+    --page-padding: 0.75in;
+    --section-spacing: 24pt;
+}
+
+/* Modern heading styles */
+h1 {
+    color: var(--color-primary);
+    font-weight: 600;
+    letter-spacing: -0.5pt;
+    border-bottom: 2pt solid var(--color-accent);
+    padding-bottom: 8pt;
+}
+
+h2 {
+    color: var(--color-primary);
+    font-weight: 600;
+    border-bottom: 1pt solid var(--color-accent);
+    text-transform: none;
+    margin-top: 20pt;
+}
+
+h3 {
+    color: var(--color-secondary);
+    font-weight: 600;
+}
+
+h4 {
+    color: var(--color-secondary);
+    font-weight: 500;
+}
+
+/* Modern contact information */
+.contact-info {
+    background-color: var(--color-highlight);
+    padding: 12pt;
+    border-radius: 6pt;
+    border-left: 4pt solid var(--color-accent);
+    margin-bottom: 24pt;
+}
+
+.contact-info a {
+    color: var(--color-accent);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.contact-info a:hover {
+    color: var(--color-secondary);
+    text-decoration: underline;
+}
+
+/* Modern section styling */
+.section {
+    margin-bottom: 28pt;
+    position: relative;
+}
+
+.section-title {
+    font-weight: 600;
+    color: var(--color-primary);
+    border-bottom: 1pt solid var(--color-accent);
+    padding-bottom: 4pt;
+    margin-bottom: 16pt;
+    text-transform: none;
+}
+
+/* Modern experience styling */
+.experience-item {
+    margin-bottom: 20pt;
+    padding: 12pt;
+    border-left: 3pt solid var(--color-accent);
+    background-color: #fdfdfd;
+    border-radius: 0 4pt 4pt 0;
+}
+
+.job-title {
+    color: var(--color-secondary);
+    font-weight: 600;
+    font-size: 13pt;
+}
+
+.company-name {
+    color: var(--color-primary);
+    font-weight: 500;
+    font-size: 12pt;
+}
+
+.job-dates {
+    color: var(--color-text-light);
+    font-style: normal;
+    font-weight: 400;
+    font-size: 10pt;
+    background-color: var(--color-highlight);
+    padding: 2pt 6pt;
+    border-radius: 3pt;
+    display: inline-block;
+    margin-bottom: 8pt;
+}
+
+.job-location {
+    color: var(--color-text-secondary);
+    font-size: 10pt;
+    font-weight: 400;
+}
+
+/* Modern education styling */
+.education-item {
+    margin-bottom: 16pt;
+    padding: 10pt;
+    background-color: var(--color-highlight);
+    border-radius: 4pt;
+    border-left: 3pt solid var(--color-accent);
+}
+
+.degree {
+    color: var(--color-secondary);
+    font-weight: 600;
+    font-size: 12pt;
+}
+
+.institution {
+    color: var(--color-primary);
+    font-weight: 500;
+    margin-bottom: 4pt;
+}
+
+.education-dates {
+    color: var(--color-text-light);
+    font-style: normal;
+    font-weight: 400;
+    background-color: #fff;
+    padding: 2pt 6pt;
+    border-radius: 3pt;
+    display: inline-block;
+}
+
+/* Modern skills presentation */
+.skills-section {
+    background-color: var(--color-highlight);
+    padding: 16pt;
+    border-radius: 6pt;
+    border: 1pt solid var(--color-border);
+}
+
+.skills-category {
+    margin-bottom: 12pt;
+}
+
+.skills-category strong {
+    color: var(--color-secondary);
+    font-weight: 600;
+    display: inline-block;
+    min-width: 120pt;
+    background-color: #fff;
+    padding: 4pt 8pt;
+    border-radius: 3pt;
+    margin-right: 8pt;
+}
+
+.skills-list {
+    color: var(--color-primary);
+    font-weight: 400;
+}
+
+/* Modern projects styling */
+.project-item {
+    margin-bottom: 18pt;
+    padding: 14pt;
+    border: 1pt solid var(--color-border);
+    border-radius: 6pt;
+    background-color: #fdfdfd;
+    position: relative;
+}
+
+.project-item::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4pt;
+    height: 100%;
+    background-color: var(--color-accent);
+    border-radius: 6pt 0 0 6pt;
+}
+
+.project-name {
+    color: var(--color-secondary);
+    font-weight: 600;
+    font-size: 12pt;
+    margin-bottom: 6pt;
+}
+
+.project-tech {
+    color: var(--color-text-light);
+    font-size: 10pt;
+    background-color: var(--color-highlight);
+    padding: 3pt 6pt;
+    border-radius: 3pt;
+    display: inline-block;
+    margin-bottom: 8pt;
+}
+
+.tech-list {
+    color: var(--color-accent);
+    font-weight: 500;
+}
+
+/* Modern certifications */
+.certification-item {
+    margin-bottom: 14pt;
+    padding: 10pt;
+    background-color: var(--color-highlight);
+    border-left: 4pt solid var(--color-accent);
+    border-radius: 0 4pt 4pt 0;
+}
+
+.cert-name {
+    color: var(--color-secondary);
+    font-weight: 600;
+}
+
+.cert-issuer {
+    color: var(--color-primary);
+    font-weight: 500;
+}
+
+.cert-date {
+    color: var(--color-text-light);
+    font-style: normal;
+    font-weight: 400;
+    background-color: #fff;
+    padding: 2pt 6pt;
+    border-radius: 3pt;
+    display: inline-block;
+}
+
+/* Modern link styling */
+a {
+    color: var(--color-accent);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+a:hover {
+    color: var(--color-secondary);
+    text-decoration: underline;
+}
+
+/* Modern summary */
+.summary {
+    background-color: var(--color-highlight);
+    padding: 16pt;
+    border-radius: 6pt;
+    border-left: 4pt solid var(--color-accent);
+    margin-bottom: 24pt;
+}
+
+.summary p {
+    color: var(--color-text);
+    line-height: 1.5;
+    margin-bottom: 10pt;
+}
+
+/* Modern bullet points */
+ul {
+    margin: 10pt 0;
+    padding-left: 20pt;
+}
+
+li {
+    margin: 6pt 0;
+    line-height: 1.4;
+    color: var(--color-text);
+}
+
+li::marker {
+    color: var(--color-accent);
+    font-weight: bold;
+}
+
+/* Modern emphasis */
+strong, b {
+    color: var(--color-secondary);
+    font-weight: 600;
+}
+
+em, i {
+    color: var(--color-text-secondary);
+    font-style: italic;
+}
+
+/* Modern responsive design */
+@media screen and (max-width: 8.5in) {
+    .skills-category strong {
+        min-width: 100pt;
+    }
+    
+    .experience-item,
+    .education-item,
+    .project-item,
+    .certification-item {
+        padding: 8pt;
+    }
+}
+
+/* Print adjustments for modern theme */
+@media print {
+    /* Simplify for print while maintaining structure */
+    .experience-item,
+    .education-item,
+    .project-item,
+    .certification-item,
+    .contact-info,
+    .summary,
+    .skills-section {
+        background-color: transparent !important;
+        border-color: #ccc !important;
+    }
+    
+    .job-dates,
+    .education-dates,
+    .cert-date {
+        background-color: transparent !important;
+        border: 1pt solid #ccc !important;
+    }
+    
+    .project-item::before {
+        background-color: #666 !important;
+    }
+}

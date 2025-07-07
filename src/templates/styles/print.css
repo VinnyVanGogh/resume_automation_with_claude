@@ -1,0 +1,336 @@
+/* Print Styles - Traditional print media queries for browser printing */
+/* Optimized for physical printing and maximum ATS compatibility */
+
+/* Print media queries for browser-based printing */
+@media print {
+    /* Page setup for physical printing */
+    @page {
+        size: Letter;
+        margin: 0.75in;
+        
+        /* Remove default headers/footers */
+        @top-center {
+            content: none;
+        }
+        
+        @bottom-center {
+            content: none;
+        }
+    }
+
+    /* Reset to maximum ATS compatibility */
+    body {
+        margin: 0;
+        padding: 0.75in;
+        font-size: 11pt;
+        font-family: Arial, sans-serif;
+        line-height: 1.2;
+        color: #000 !important;
+        background: #fff !important;
+    }
+    
+    /* Remove all background colors and ensure black text */
+    * {
+        background: transparent !important;
+        color: #000 !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+        border-color: #000 !important;
+    }
+    
+    /* Simplify typography for print */
+    h1 {
+        font-size: 20pt;
+        color: #000 !important;
+        border-bottom: 1pt solid #000;
+        text-align: center;
+        margin-bottom: 12pt;
+        padding-bottom: 4pt;
+    }
+    
+    h2 {
+        font-size: 14pt;
+        color: #000 !important;
+        border-bottom: 1pt solid #000;
+        margin-top: 16pt;
+        margin-bottom: 8pt;
+        padding-bottom: 2pt;
+        text-transform: uppercase;
+    }
+    
+    h3 {
+        font-size: 12pt;
+        color: #000 !important;
+        margin-top: 10pt;
+        margin-bottom: 4pt;
+    }
+    
+    h4 {
+        font-size: 11pt;
+        color: #000 !important;
+        margin-top: 6pt;
+        margin-bottom: 2pt;
+    }
+    
+    /* Prevent page breaks in critical areas */
+    h1, h2, h3, h4 {
+        page-break-after: avoid;
+        orphans: 3;
+        widows: 3;
+    }
+    
+    /* Section spacing optimized for print */
+    .section {
+        margin-bottom: 18pt;
+        page-break-inside: avoid;
+    }
+    
+    .section:last-child {
+        margin-bottom: 0;
+    }
+    
+    /* Contact information for print */
+    .contact-info {
+        text-align: center;
+        margin-bottom: 16pt;
+        background: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+    }
+    
+    .contact-info p {
+        margin: 3pt 0;
+        color: #000 !important;
+    }
+    
+    /* Experience items - prevent breaking */
+    .experience-item {
+        margin-bottom: 12pt;
+        page-break-inside: avoid;
+        orphans: 3;
+        widows: 3;
+        background: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+    }
+    
+    .job-title {
+        font-weight: bold;
+        font-size: 12pt;
+        color: #000 !important;
+    }
+    
+    .company-name {
+        font-weight: bold;
+        font-size: 11pt;
+        color: #000 !important;
+    }
+    
+    .job-dates {
+        font-style: italic;
+        color: #000 !important;
+        font-size: 10pt;
+        margin-bottom: 4pt;
+    }
+    
+    .job-location {
+        color: #000 !important;
+        font-size: 10pt;
+    }
+    
+    /* Education items for print */
+    .education-item {
+        margin-bottom: 10pt;
+        page-break-inside: avoid;
+        background: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+    }
+    
+    .degree {
+        font-weight: bold;
+        font-size: 11pt;
+        color: #000 !important;
+    }
+    
+    .institution {
+        font-size: 11pt;
+        color: #000 !important;
+        margin-bottom: 2pt;
+    }
+    
+    .education-dates {
+        font-style: italic;
+        color: #000 !important;
+        font-size: 10pt;
+    }
+    
+    /* Skills section for print */
+    .skills-section {
+        margin-bottom: 16pt;
+        background: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+    }
+    
+    .skills-category {
+        margin-bottom: 6pt;
+        page-break-inside: avoid;
+    }
+    
+    .skills-category strong {
+        font-weight: bold;
+        color: #000 !important;
+        display: inline-block;
+        min-width: 100pt;
+    }
+    
+    /* List formatting for print */
+    ul {
+        margin: 6pt 0;
+        padding-left: 18pt;
+    }
+    
+    li {
+        margin: 3pt 0;
+        line-height: 1.2;
+        color: #000 !important;
+        page-break-inside: avoid;
+    }
+    
+    /* Projects for print */
+    .project-item {
+        margin-bottom: 12pt;
+        page-break-inside: avoid;
+        background: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+    }
+    
+    .project-name {
+        font-weight: bold;
+        font-size: 11pt;
+        color: #000 !important;
+    }
+    
+    .project-tech {
+        color: #000 !important;
+        font-size: 10pt;
+        margin-bottom: 4pt;
+    }
+    
+    /* Certifications for print */
+    .certification-item {
+        margin-bottom: 8pt;
+        page-break-inside: avoid;
+        background: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+    }
+    
+    .cert-name {
+        font-weight: bold;
+        color: #000 !important;
+    }
+    
+    .cert-issuer {
+        color: #000 !important;
+    }
+    
+    .cert-date {
+        font-style: italic;
+        color: #000 !important;
+        font-size: 10pt;
+    }
+    
+    /* Links for print - show URL */
+    a {
+        color: #000 !important;
+        text-decoration: none;
+    }
+    
+    a[href^="http"]:after {
+        content: " (" attr(href) ")";
+        font-size: 9pt;
+        color: #000 !important;
+    }
+    
+    a[href^="mailto"]:after {
+        content: "";
+    }
+    
+    a[href^="tel"]:after {
+        content: "";
+    }
+    
+    /* Remove interactive elements */
+    nav, .no-print {
+        display: none !important;
+    }
+    
+    /* Optimize for single page when possible */
+    .compact {
+        margin-bottom: 10pt;
+    }
+    
+    .compact h2 {
+        margin-top: 10pt;
+        margin-bottom: 6pt;
+    }
+    
+    .compact .experience-item {
+        margin-bottom: 8pt;
+    }
+    
+    .compact .education-item {
+        margin-bottom: 6pt;
+    }
+    
+    /* Summary section for print */
+    .summary {
+        margin-bottom: 14pt;
+        background: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+    }
+    
+    .summary p {
+        text-align: justify;
+        margin-bottom: 6pt;
+        color: #000 !important;
+    }
+    
+    /* Paragraphs */
+    p {
+        margin: 4pt 0;
+        line-height: 1.2;
+        color: #000 !important;
+    }
+    
+    /* Text emphasis */
+    strong, b {
+        font-weight: bold;
+        color: #000 !important;
+    }
+    
+    em, i {
+        font-style: italic;
+        color: #000 !important;
+    }
+    
+    /* Hide decorative elements that may confuse ATS */
+    .border, .bg-color, .shadow {
+        display: none !important;
+    }
+    
+    /* Ensure consistent spacing */
+    .contact-line {
+        margin: 1pt 0;
+    }
+    
+    /* Orphan and widow control */
+    p, li, .experience-item, .education-item {
+        orphans: 2;
+        widows: 2;
+    }
+}

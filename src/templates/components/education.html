@@ -1,0 +1,81 @@
+{# Education component #}
+{% if education %}
+<section class="section education-section" aria-labelledby="education-heading">
+    <h2 id="education-heading" class="section-title">Education</h2>
+    
+    {% for edu in education %}
+    <article class="education-item" typeof="EducationalOccupationalCredential">
+        <header class="education-header">
+            <h3 class="degree" property="credentialCategory">
+                {{ edu.degree }}
+                {% if edu.school %}
+                <span class="separator" aria-hidden="true"> | </span>
+                <span class="institution" property="recognizedBy" typeof="EducationalOrganization">
+                    <span property="name">{{ edu.school }}</span>
+                </span>
+                {% endif %}
+            </h3>
+            
+            {% if edu.start_date or edu.end_date or edu.location %}
+            <div class="education-meta" role="group" aria-label="Education details">
+                {% if edu.start_date or edu.end_date %}
+                <span class="education-dates">
+                    {% if edu.start_date %}
+                    <time property="dateCreated" datetime="{{ edu.start_date }}">{{ edu.start_date }}</time>
+                    <span aria-hidden="true"> - </span>
+                    {% endif %}
+                    {% if edu.end_date %}
+                    <time property="dateCompleted" datetime="{{ edu.end_date }}">{{ edu.end_date }}</time>
+                    {% endif %}
+                </span>
+                {% endif %}
+                
+                {% if (edu.start_date or edu.end_date) and edu.location %}
+                <span class="separator" aria-hidden="true"> | </span>
+                {% endif %}
+                
+                {% if edu.location %}
+                <span class="education-location" property="addressLocality">{{ edu.location }}</span>
+                {% endif %}
+            </div>
+            {% endif %}
+        </header>
+        
+        {% if edu.gpa %}
+        <div class="education-details">
+            <p class="gpa">
+                <strong>GPA:</strong> 
+                <span property="educationalCredentialAwarded">{{ edu.gpa }}</span>
+            </p>
+        </div>
+        {% endif %}
+        
+        {% if edu.honors %}
+        <div class="education-details">
+            <div class="honors">
+                <strong>Honors:</strong>
+                <ul class="honors-list">
+                    {% for honor in edu.honors %}
+                    <li class="honor-item">{{ honor }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+        
+        {% if edu.coursework %}
+        <div class="education-details">
+            <div class="coursework">
+                <strong>Relevant Coursework:</strong>
+                <ul class="coursework-list">
+                    {% for course in edu.coursework %}
+                    <li class="course-item">{{ course }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+    </article>
+    {% endfor %}
+</section>
+{% endif %}
