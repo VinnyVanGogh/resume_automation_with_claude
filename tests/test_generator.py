@@ -382,3 +382,32 @@ class TestResumeGenerator:
         assert isinstance(html_content, str)
         assert "html" in html_content.lower()
         assert "legacy" in html_content.lower()
+
+
+class TestOutputConfig:
+    """Test OutputConfig functionality."""
+    
+    def test_output_config_get_output_path_invalid_format(self):
+        """Test OutputConfig with invalid format."""
+        config = OutputConfig()
+        
+        # Test invalid format
+        with pytest.raises(ValueError, match="Unsupported format type"):
+            config.get_output_path("invalid")
+        
+        # Test custom filename
+        custom_path = config.get_output_path("html", "custom_resume")
+        assert custom_path.name == "custom_resume.html"
+    
+    def test_output_config_from_dict(self):
+        """Test OutputConfig.from_dict class method."""
+        config_dict = {
+            "output_dir": "test_dir",
+            "filename_prefix": "test_file",
+            "overwrite_existing": True
+        }
+        
+        config = OutputConfig.from_dict(config_dict)
+        assert config.output_dir == Path("test_dir")
+        assert config.filename_prefix == "test_file"
+        assert config.overwrite_existing is True
