@@ -19,7 +19,7 @@ push_tags = true
 safety_checks = true
 
 [ai]
-enabled = false
+enabled = true
 provider = "openai"
 model = "gpt-4.1-nano"
 max_tokens = 150

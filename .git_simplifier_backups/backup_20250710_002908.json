@@ -1,0 +1,117 @@
+{
+  "timestamp": "2025-07-10T00:29:08.716576",
+  "current_branch": "feature/phase-6-config-cli-integration",
+  "commit_hash": "54f72c42d31641d9b45258b547b3338ea4dd0e29",
+  "tags": [
+    "v0.1.0-alpha.2",
+    "v0.1.0-alpha.3"
+  ],
+  "uncommitted_changes": {
+    "staged_files": [],
+    "modified_files": [
+      {
+        "status": "M",
+        "file": ".git-simplifier/git-simplifier.toml"
+      },
+      {
+        "status": "M",
+        "file": "README.md"
+      },
+      {
+        "status": "M",
+        "file": "pyproject.toml"
+      },
+      {
+        "status": "M",
+        "file": "src/cli.py"
+      },
+      {
+        "status": "M",
+        "file": "src/converter/__init__.py"
+      },
+      {
+        "status": "M",
+        "file": "src/converter/batch_processor.py"
+      },
+      {
+        "status": "M",
+        "file": "src/converter/config_manager.py"
+      },
+      {
+        "status": "M",
+        "file": "src/converter/error_handler.py"
+      },
+      {
+        "status": "M",
+        "file": "src/converter/exceptions.py"
+      },
+      {
+        "status": "M",
+        "file": "src/converter/file_manager.py"
+      },
+      {
+        "status": "M",
+        "file": "src/converter/progress_tracker.py"
+      },
+      {
+        "status": "M",
+        "file": "src/converter/quality_validator.py"
+      },
+      {
+        "status": "M",
+        "file": "src/converter/resume_converter.py"
+      },
+      {
+        "status": "M",
+        "file": "src/converter/tests/__init__.py"
+      },
+      {
+        "status": "M",
+        "file": "src/converter/tests/test_integration.py"
+      },
+      {
+        "status": "M",
+        "file": "src/converter/types.py"
+      },
+      {
+        "status": "M",
+        "file": "src/converter/utilities.py"
+      },
+      {
+        "status": "M",
+        "file": "uv.lock"
+      }
+    ],
+    "untracked_files": [
+      "SPEC_PRP/PRPs/issue-23-cli-interface-development.md",
+      "docs/IMPLEMENTATION_PLAN_ISSUE_22.md",
+      "docs/converter.md",
+      "src/converter/tests/test_batch_processor.py",
+      "src/converter/tests/test_config_manager.py",
+      "src/converter/tests/test_error_handler.py",
+      "src/converter/tests/test_file_manager.py",
+      "src/converter/tests/test_progress_tracker.py",
+      "src/converter/tests/test_quality_validator.py",
+      "src/converter/tests/test_resume_converter.py",
+      "src/converter/tests/test_types.py",
+      "src/converter/tests/test_utilities.py",
+      "test_resume.md",
+      "transcripts/ai/current_transcription.md",
+      "transcripts/ai/transcription_07-09-2025_19-39-54.md",
+      "transcripts/history.json",
+      "transcripts/normal/current_transcription.txt",
+      "transcripts/normal/transcription_07-09-2025_19-39-54.txt"
+    ],
+    "has_changes": true
+  },
+  "stash_count": 0,
+  "remote_branches": [
+    "origin/feature/phase-2-parser-implementation",
+    "origin/feature/phase-3-ats-formatter",
+    "origin/feature/phase-4-output-generation",
+    "origin/feature/phase-5-templates-styling",
+    "origin/main"
+  ],
+  "operation_context": "increment_to_0.1.0-alpha.4",
+  "backup_id": "backup_20250710_002908"
+}

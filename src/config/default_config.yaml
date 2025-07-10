@@ -1,0 +1,175 @@
+# Default Configuration for Resume Automation System
+# This file provides comprehensive default settings for ATS rules,
+# output formats, styling, and processing options.
+
+# Configuration metadata
+version: "1.0"
+created_by: "resume-automation"
+
+# ATS Rules Configuration
+# Settings for optimizing resumes for Applicant Tracking Systems
+ats_rules:
+  # Line length for optimal ATS parsing
+  max_line_length: 80
+  
+  # Bullet point style - use ATS-friendly characters
+  bullet_style: "•"
+  
+  # Preferred order of resume sections for ATS scanning
+  section_order:
+    - "contact"
+    - "summary"
+    - "experience"
+    - "education"
+    - "skills"
+    - "projects"
+    - "certifications"
+  
+  # Keyword optimization settings
+  optimize_keywords: true
+  remove_special_chars: true
+  
+  # Keyword emphasis configuration
+  keyword_emphasis_bold: true
+  keyword_emphasis_caps: false
+  keyword_density_target: 0.02  # 2% keyword density
+  skill_prioritization: true
+
+# Output Formats Configuration
+# Settings for PDF, DOCX, and HTML generation
+output_formats:
+  # Enabled formats
+  enabled_formats:
+    - "html"
+    - "pdf"
+    - "docx"
+  
+  # HTML configuration
+  html_theme: "professional"
+  html_include_styles: true
+  html_meta_description: "Professional resume"
+  
+  # PDF configuration
+  pdf_page_size: "Letter"  # Letter, A4, Legal
+  pdf_optimize_size: true
+  pdf_margins:
+    top: 0.75
+    bottom: 0.75
+    left: 0.75
+    right: 0.75
+  
+  # DOCX configuration
+  docx_template: "professional"  # professional, modern, minimal, tech
+  docx_line_spacing: 1.15
+  docx_margins:
+    top: 0.75
+    bottom: 0.75
+    left: 0.75
+    right: 0.75
+  
+  # Output file settings
+  output_directory: "output"
+  filename_prefix: "resume"
+  overwrite_existing: true
+
+# Styling Configuration
+# Font settings, themes, and visual appearance
+styling:
+  # Font settings
+  font_family: "Arial"
+  font_size: 11
+  font_weight: "normal"
+  
+  # Theme selection
+  theme: "professional"  # professional, modern, minimal, tech
+  
+  # Color scheme (hex values)
+  color_scheme:
+    primary: "#000000"      # Black for main text
+    secondary: "#333333"    # Dark gray for secondary text
+    accent: "#0066cc"       # Blue for accents
+    background: "#ffffff"   # White background
+  
+  # Spacing and layout
+  section_spacing: 12
+  line_height: 1.15
+  paragraph_spacing: 6
+  
+  # Layout options
+  layout_style: "single_column"
+  header_style: "centered"
+
+# Processing Configuration
+# Settings for batch processing and performance
+processing:
+  # Batch processing settings
+  batch_size: 1
+  max_workers: 1
+  timeout_seconds: 300
+  
+  # Validation settings
+  validate_input: true
+  validate_output: true
+  strict_validation: false
+  
+  # Performance settings
+  cache_templates: true
+  optimize_images: true
+
+# Logging Configuration
+# Settings for application logging
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file_path: null
+  max_file_size: 10485760  # 10MB
+  backup_count: 3
+
+# Template and Theme Definitions
+# Available themes and their characteristics:
+#
+# professional: Clean, traditional corporate look
+# - Sans-serif fonts (Arial, Helvetica)
+# - Conservative color scheme
+# - Standard spacing and margins
+# - Best for corporate and traditional industries
+#
+# modern: Contemporary design with subtle styling
+# - Mix of serif and sans-serif fonts
+# - Slightly larger headings
+# - Accent colors for section headers
+# - Good for tech and creative industries
+#
+# minimal: Clean, minimalist approach
+# - Simple typography
+# - Lots of whitespace
+# - Monochrome color scheme
+# - Suitable for any industry
+#
+# tech: Developer-focused styling
+# - Monospace fonts for technical sections
+# - Code-friendly formatting
+# - Tech industry color scheme
+# - Optimized for technical roles
+
+# Font Recommendations by Industry:
+#
+# Corporate/Finance: Arial, Helvetica, Calibri
+# Creative/Design: Georgia, Garamond, Open Sans
+# Technology: Arial, Helvetica, Source Sans Pro
+# Healthcare: Times New Roman, Arial, Calibri
+# Education: Times New Roman, Georgia, Arial
+# Legal: Times New Roman, Georgia, Garamond
+
+# ATS Optimization Guidelines:
+#
+# 1. Use standard fonts (Arial, Helvetica, Times New Roman)
+# 2. Avoid fancy formatting (tables, text boxes, headers/footers)
+# 3. Use simple bullet points (•, -, *)
+# 4. Keep line length under 80 characters
+# 5. Use standard section headers
+# 6. Save in multiple formats (.pdf, .docx, .txt)
+# 7. Include keywords from job descriptions
+# 8. Use consistent formatting throughout
+# 9. Avoid images and graphics
+# 10. Test with ATS scanning tools
