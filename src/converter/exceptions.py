@@ -5,26 +5,26 @@ This module defines the exception hierarchy used throughout the converter
 pipeline for comprehensive error handling.
 """
 
-from typing import Optional, Dict, Any
+from typing import Any
 
 
 class ConversionError(Exception):
     """
     Base exception for conversion-related errors.
-    
+
     This is the base class for all errors that occur during the
     resume conversion pipeline.
     """
-    
+
     def __init__(
-        self, 
-        message: str, 
-        stage: Optional[str] = None,
-        details: Optional[Dict[str, Any]] = None
+        self,
+        message: str,
+        stage: str | None = None,
+        details: dict[str, Any] | None = None,
     ) -> None:
         """
         Initialize conversion error.
-        
+
         Args:
             message: Error message
             stage: Optional stage where error occurred
@@ -33,7 +33,7 @@ class ConversionError(Exception):
         self.stage = stage
         self.details = details or {}
         super().__init__(message)
-    
+
     def __str__(self) -> str:
         """Return formatted error message."""
         if self.stage:
@@ -44,20 +44,17 @@ class ConversionError(Exception):
 class ValidationError(ConversionError):
     """
     Exception for input validation errors.
-    
+
     Raised when input files or configuration fail validation
     before processing begins.
     """
-    
+
     def __init__(
-        self, 
-        message: str, 
-        field: Optional[str] = None,
-        value: Optional[Any] = None
+        self, message: str, field: str | None = None, value: Any | None = None
     ) -> None:
         """
         Initialize validation error.
-        
+
         Args:
             message: Error message
             field: Field that failed validation
@@ -76,21 +73,21 @@ class ValidationError(ConversionError):
 class ProcessingError(ConversionError):
     """
     Exception for processing pipeline errors.
-    
+
     Raised when errors occur during parsing, formatting, or
     output generation stages.
     """
-    
+
     def __init__(
         self,
         message: str,
-        stage: str,
-        component: Optional[str] = None,
-        original_error: Optional[Exception] = None
+        stage: str | None = None,
+        component: str | None = None,
+        original_error: Exception | None = None,
     ) -> None:
         """
         Initialize processing error.
-        
+
         Args:
             message: Error message
             stage: Processing stage where error occurred
@@ -105,25 +102,25 @@ class ProcessingError(ConversionError):
         if original_error:
             details["original_error"] = str(original_error)
             details["original_type"] = type(original_error).__name__
-        super().__init__(message, stage=stage, details=details)
+        super().__init__(message, stage=stage or "processing", details=details)
 
 
 class ConfigurationError(ConversionError):
     """
     Exception for configuration-related errors.
-    
+
     Raised when configuration loading or validation fails.
     """
-    
+
     def __init__(
         self,
         message: str,
-        config_path: Optional[str] = None,
-        config_section: Optional[str] = None
+        config_path: str | None = None,
+        config_section: str | None = None,
     ) -> None:
         """
         Initialize configuration error.
-        
+
         Args:
             message: Error message
             config_path: Path to configuration file
@@ -142,19 +139,19 @@ class ConfigurationError(ConversionError):
 class FileError(ConversionError):
     """
     Exception for file-related errors.
-    
+
     Raised when file operations fail during processing.
     """
-    
+
     def __init__(
         self,
         message: str,
-        file_path: Optional[str] = None,
-        operation: Optional[str] = None
+        file_path: str | None = None,
+        operation: str | None = None,
     ) -> None:
         """
         Initialize file error.
-        
+
         Args:
             message: Error message
             file_path: Path to file that caused error

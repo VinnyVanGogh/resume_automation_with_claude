@@ -8,50 +8,50 @@ Main Classes:
     ResumeConverter: Main converter class for orchestrating the pipeline
     ConversionResult: Result object for single conversions
     BatchConversionResult: Result object for batch conversions
-    
+
 Main Functions:
     convert_resume: Convenience function for simple conversions
 """
 
-from .resume_converter import ResumeConverter
-from .types import (
-    ConversionResult,
-    BatchConversionResult,
-    ProgressCallback,
-)
 from .exceptions import (
     ConversionError,
-    ValidationError,
     ProcessingError,
+    ValidationError,
 )
+from .resume_converter import ResumeConverter
+from .types import (
+    BatchConversionResult,
+    ConversionResult,
+    ProgressCallback,
+)
+
 
 # Convenience function for simple usage
 def convert_resume(
-    input_path: str, 
-    output_dir: str = "output", 
-    config_path: str = None
+    input_path: str, output_dir: str = "output", config_path: str = None
 ) -> ConversionResult:
     """
     Convenience function for simple resume conversion.
-    
+
     Args:
         input_path: Path to markdown resume file
         output_dir: Output directory for generated files
         config_path: Optional path to configuration file
-        
+
     Returns:
         ConversionResult: Result of the conversion operation
     """
     converter = ResumeConverter(config_path=config_path)
     return converter.convert(input_path, output_dir=output_dir)
 
+
 __all__ = [
     "ResumeConverter",
-    "ConversionResult", 
+    "ConversionResult",
     "BatchConversionResult",
     "ProgressCallback",
     "ConversionError",
-    "ValidationError", 
+    "ValidationError",
     "ProcessingError",
     "convert_resume",
 ]

@@ -5,12 +5,39 @@ This module provides a comprehensive CLI for the ResumeConverter with support
 for single file conversion, batch processing, and configuration management.
 """
 
-import argparse
+import click
 import sys
 import logging
 from pathlib import Path
 from typing import List, Optional, Dict, Any
 import json
+
+
+def get_version() -> str:
+    """
+    Extract version from pyproject.toml dynamically.
+    
+    Returns:
+        Version string from pyproject.toml or fallback version
+    """
+    try:
+        # Try Python 3.11+ built-in tomllib first
+        try:
+            import tomllib
+        except ImportError:
+            # Fallback to tomli for older versions
+            import tomli as tomllib
+        
+        project_root = Path(__file__).parent.parent
+        pyproject_path = project_root / "pyproject.toml"
+        
+        with open(pyproject_path, "rb") as f:
+            data = tomllib.load(f)
+            return data["project"]["version"]
+    except Exception as e:
+        # Fallback to hardcoded version if anything goes wrong
+        logger.warning(f"Could not extract version from pyproject.toml: {e}")
+        return "0.1.0-alpha.3"
 
 from .converter import ResumeConverter, convert_resume
 from .converter.batch_processor import BatchProcessor
@@ -56,20 +83,20 @@ class CLIProgressReporter:
         # Show stage transitions
         if stage != self.last_stage and not stage.startswith("batch"):
             if self.verbose:
-                print(f"\n🔄 {stage.upper()}: {message}")
+                click.echo(f"\n🔄 {stage.upper()}: {message}")
             self.last_stage = stage
         
         # Show progress for long operations
         if stage in ["processing", "batch_progress"] or progress in [0.0, 100.0]:
             if self.verbose:
                 progress_bar = self._create_progress_bar(progress)
-                print(f"\r{progress_bar} {progress:5.1f}% - {message}", end="", flush=True)
+                click.echo(f"\r{progress_bar} {progress:5.1f}% - {message}", nl=False)
             elif progress == 100.0 or stage == "complete":
-                print(f"✅ {message}")
+                click.echo(f"✅ {message}")
         
         # Show batch-specific progress
         if stage == "batch_complete":
-            print(f"\n✅ {message}")
+            click.echo(f"\n✅ {message}")
     
     def _create_progress_bar(self, progress: float, width: int = 30) -> str:
         """Create a text-based progress bar."""
@@ -78,174 +105,51 @@ class CLIProgressReporter:
         return f"[{bar}]"
 
 
-def create_parser() -> argparse.ArgumentParser:
+# Common validation functions for click commands
+def validate_input_file(input_file: str) -> Path:
     """
-    Create the CLI argument parser.
-    
-    Returns:
-        Configured ArgumentParser instance
-    """
-    parser = argparse.ArgumentParser(
-        description="Resume Automation Tool - Convert markdown resumes to multiple formats",
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog="""
-Examples:
-  # Convert single resume with default settings
-  resume-convert resume.md
-  
-  # Convert with custom configuration
-  resume-convert resume.md --config my_config.yaml
-  
-  # Convert to specific formats only
-  resume-convert resume.md --formats html pdf
-  
-  # Batch convert multiple resumes
-  resume-convert *.md --batch --output-dir outputs/
-  
-  # Convert with custom output directory
-  resume-convert resume.md --output-dir /path/to/output
-        """
-    )
-    
-    # Input arguments
-    parser.add_argument(
-        "input_files",
-        nargs="+",
-        help="Resume file(s) to convert (markdown format)"
-    )
-    
-    # Output configuration
-    parser.add_argument(
-        "--output-dir", "-o",
-        type=str,
-        help="Output directory for generated files (default: ./output)"
-    )
-    
-    parser.add_argument(
-        "--formats", "-f",
-        nargs="+",
-        choices=["html", "pdf", "docx"],
-        help="Output formats to generate (default: all formats)"
-    )
-    
-    # Configuration
-    parser.add_argument(
-        "--config", "-c",
-        type=str,
-        help="Path to configuration file (YAML format)"
-    )
-    
-    parser.add_argument(
-        "--config-override",
-        action="append",
-        help="Override configuration values (e.g., --config-override ats_rules.max_line_length=85)"
-    )
-    
-    # Processing options
-    parser.add_argument(
-        "--batch", "-b",
-        action="store_true",
-        help="Enable batch processing mode for multiple files"
-    )
-    
-    parser.add_argument(
-        "--workers", "-w",
-        type=int,
-        help="Number of worker threads for batch processing"
-    )
-    
-    parser.add_argument(
-        "--no-validation",
-        action="store_true",
-        help="Skip output validation"
-    )
-    
-    # Output control
-    parser.add_argument(
-        "--verbose", "-v",
-        action="store_true",
-        help="Enable verbose output"
-    )
-    
-    parser.add_argument(
-        "--quiet", "-q",
-        action="store_true",
-        help="Suppress all output except errors"
-    )
-    
-    parser.add_argument(
-        "--json-output",
-        action="store_true",
-        help="Output results in JSON format"
-    )
-    
-    # Utility commands
-    parser.add_argument(
-        "--list-formats",
-        action="store_true",
-        help="List available output formats and exit"
-    )
-    
-    parser.add_argument(
-        "--list-themes",
-        action="store_true",
-        help="List available themes and exit"
-    )
-    
-    parser.add_argument(
-        "--validate-config",
-        type=str,
-        help="Validate configuration file and exit"
-    )
-    
-    parser.add_argument(
-        "--version",
-        action="store_true",
-        help="Show version information and exit"
-    )
-    
-    return parser
-
-
-def validate_arguments(args: argparse.Namespace) -> None:
-    """
-    Validate command-line arguments.
+    Validate input file exists and is a markdown file.
     
     Args:
-        args: Parsed command-line arguments
+        input_file: Path to input file
+        
+    Returns:
+        Path object for the validated file
         
     Raises:
-        SystemExit: If arguments are invalid
+        click.ClickException: If file is invalid
     """
-    # Check input files exist
-    for input_file in args.input_files:
-        input_path = Path(input_file)
-        if not input_path.exists():
-            print(f"❌ Error: Input file does not exist: {input_file}", file=sys.stderr)
-            sys.exit(1)
+    input_path = Path(input_file)
+    if not input_path.exists():
+        raise click.ClickException(f"Input file does not exist: {input_file}")
+    
+    if not input_path.is_file():
+        raise click.ClickException(f"Input path is not a file: {input_file}")
+    
+    if input_path.suffix.lower() not in ['.md', '.markdown']:
+        click.echo(f"⚠️  Warning: File does not have .md extension: {input_file}", err=True)
+    
+    return input_path
+
+
+def validate_config_file(config_file: str) -> Path:
+    """
+    Validate configuration file exists.
+    
+    Args:
+        config_file: Path to configuration file
         
-        if not input_path.is_file():
-            print(f"❌ Error: Input path is not a file: {input_file}", file=sys.stderr)
-            sys.exit(1)
+    Returns:
+        Path object for the validated file
         
-        if input_path.suffix.lower() not in ['.md', '.markdown']:
-            print(f"⚠️  Warning: File does not have .md extension: {input_file}", file=sys.stderr)
+    Raises:
+        click.ClickException: If file is invalid
+    """
+    config_path = Path(config_file)
+    if not config_path.exists():
+        raise click.ClickException(f"Configuration file does not exist: {config_file}")
     
-    # Check configuration file exists
-    if args.config:
-        config_path = Path(args.config)
-        if not config_path.exists():
-            print(f"❌ Error: Configuration file does not exist: {args.config}", file=sys.stderr)
-            sys.exit(1)
-    
-    # Validate conflicting options
-    if args.verbose and args.quiet:
-        print("❌ Error: Cannot use --verbose and --quiet together", file=sys.stderr)
-        sys.exit(1)
-    
-    # Batch processing validation
-    if len(args.input_files) > 1 and not args.batch:
-        print("⚠️  Warning: Multiple input files detected. Consider using --batch flag for better performance")
+    return config_path
 
 
 def parse_config_overrides(overrides: List[str]) -> Dict[str, Any]:
@@ -280,71 +184,55 @@ def parse_config_overrides(overrides: List[str]) -> Dict[str, Any]:
     return parsed_overrides
 
 
-def handle_utility_commands(args: argparse.Namespace) -> bool:
+# Utility functions that will be used by click commands
+def get_converter() -> ResumeConverter:
+    """Get a ResumeConverter instance for utility commands."""
+    return ResumeConverter()
+
+
+def validate_config_content(config_file: str) -> None:
     """
-    Handle utility commands that don't require conversion.
+    Validate configuration file content.
     
     Args:
-        args: Parsed command-line arguments
+        config_file: Path to configuration file
         
-    Returns:
-        True if a utility command was handled, False otherwise
+    Raises:
+        click.ClickException: If configuration is invalid
     """
-    if args.version:
-        print("Resume Automation Tool v0.1.0-alpha.3")
-        print("Built with Python 3.12+")
-        return True
-    
-    if args.list_formats:
-        converter = ResumeConverter()
-        formats = converter.get_supported_formats()
-        print("Available output formats:")
-        for fmt in formats:
-            print(f"  • {fmt}")
-        return True
-    
-    if args.list_themes:
-        converter = ResumeConverter()
-        themes = converter.get_available_themes()
-        print("Available themes:")
-        for format_type, theme_list in themes.items():
-            print(f"  {format_type.upper()}:")
-            for theme in theme_list:
-                print(f"    • {theme}")
-        return True
-    
-    if args.validate_config:
-        try:
-            from .converter.config_manager import ConverterConfigManager
-            config_manager = ConverterConfigManager(args.validate_config)
-            print(f"✅ Configuration file is valid: {args.validate_config}")
-            
-            if args.verbose:
-                summary = config_manager.get_config_summary()
-                print("Configuration summary:")
-                for key, value in summary.items():
-                    print(f"  {key}: {value}")
-            
-        except Exception as e:
-            print(f"❌ Configuration validation failed: {e}", file=sys.stderr)
-            sys.exit(1)
+    try:
+        from .converter.config_manager import ConverterConfigManager
+        config_manager = ConverterConfigManager(config_file)
+        click.echo(f"✅ Configuration file is valid: {config_file}")
         
-        return True
-    
-    return False
+        summary = config_manager.get_config_summary()
+        click.echo("Configuration summary:")
+        for key, value in summary.items():
+            click.echo(f"  {key}: {value}")
+            
+    except Exception as e:
+        raise click.ClickException(f"Configuration validation failed: {e}")
 
 
 def convert_single_file(
     input_file: str,
-    args: argparse.Namespace,
-    progress_reporter: CLIProgressReporter
+    output_dir: Optional[str] = None,
+    formats: Optional[List[str]] = None,
+    config_path: Optional[str] = None,
+    config_overrides: Optional[List[str]] = None,
+    no_validation: bool = False,
+    progress_reporter: Optional[CLIProgressReporter] = None
 ) -> Dict[str, Any]:
     """
     Convert a single resume file.
     
     Args:
         input_file: Path to input file
-        args: Command-line arguments
+        output_dir: Output directory for generated files
+        formats: List of output formats to generate
+        config_path: Path to configuration file
+        config_overrides: List of configuration overrides
+        no_validation: Skip output validation
         progress_reporter: Progress reporter instance
         
     Returns:
@@ -353,20 +241,20 @@ def convert_single_file(
     try:
         # Create converter
         converter = ResumeConverter(
-            config_path=args.config,
+            config_path=config_path,
             progress_callback=progress_reporter
         )
         
         # Parse overrides
         overrides = {}
-        if args.config_override:
-            overrides = parse_config_overrides(args.config_override)
+        if config_overrides:
+            overrides = parse_config_overrides(config_overrides)
         
         # Perform conversion
         result = converter.convert(
             input_path=input_file,
-            output_dir=args.output_dir,
-            formats=args.formats,
+            output_dir=output_dir,
+            formats=formats,
             overrides=overrides
         )
         
@@ -393,8 +281,13 @@ def convert_single_file(
 
 def convert_batch(
     input_files: List[str],
-    args: argparse.Namespace,
-    progress_reporter: CLIProgressReporter
+    output_dir: Optional[str] = None,
+    formats: Optional[List[str]] = None,
+    config_path: Optional[str] = None,
+    config_overrides: Optional[List[str]] = None,
+    no_validation: bool = False,
+    workers: Optional[int] = None,
+    progress_reporter: Optional[CLIProgressReporter] = None
 ) -> Dict[str, Any]:
     """
     Convert multiple files in batch.
@@ -458,99 +351,354 @@ def convert_batch(
         }
 
 
-def print_results(results: Dict[str, Any], args: argparse.Namespace) -> None:
+def print_results(results: Dict[str, Any], json_output: bool = False, verbose: bool = False) -> None:
     """
     Print conversion results to console.
     
     Args:
         results: Conversion results
-        args: Command-line arguments
+        json_output: Output results in JSON format
+        verbose: Enable verbose output
     """
-    if args.json_output:
-        print(json.dumps(results, indent=2))
-        return
-    
-    if args.quiet:
+    if json_output:
+        click.echo(json.dumps(results, indent=2))
         return
     
     # Print results based on type
     if "total_files" in results:
         # Batch results
-        print(f"\n📊 Batch Conversion Summary:")
-        print(f"  Total files: {results['total_files']}")
-        print(f"  Successful: {results['successful_files']}")
-        print(f"  Failed: {results['failed_files']}")
-        print(f"  Success rate: {results['success_rate']:.1f}%")
-        print(f"  Total time: {results['total_processing_time']:.2f}s")
+        click.echo(f"\n📊 Batch Conversion Summary:")
+        click.echo(f"  Total files: {results['total_files']}")
+        click.echo(f"  Successful: {results['successful_files']}")
+        click.echo(f"  Failed: {results['failed_files']}")
+        click.echo(f"  Success rate: {results['success_rate']:.1f}%")
+        click.echo(f"  Total time: {results['total_processing_time']:.2f}s")
         
-        if results['failed_files'] > 0 and args.verbose:
-            print(f"\n❌ Failed conversions:")
+        if results['failed_files'] > 0 and verbose:
+            click.echo(f"\n❌ Failed conversions:")
             for result in results['results']:
                 if not result['success']:
-                    print(f"  • {result['file']}: {result['errors'][0] if result['errors'] else 'Unknown error'}")
+                    click.echo(f"  • {result['file']}: {result['errors'][0] if result['errors'] else 'Unknown error'}")
     
     else:
         # Single file results
         if results['success']:
-            print(f"\n✅ Conversion successful!")
-            print(f"  Input: {results['file']}")
-            print(f"  Outputs: {len(results['output_files'])} files")
-            if args.verbose:
+            click.echo(f"\n✅ Conversion successful!")
+            click.echo(f"  Input: {results['file']}")
+            click.echo(f"  Outputs: {len(results['output_files'])} files")
+            if verbose:
                 for output_file in results['output_files']:
-                    print(f"    • {output_file}")
-            print(f"  Processing time: {results['processing_time']:.2f}s")
+                    click.echo(f"    • {output_file}")
+            click.echo(f"  Processing time: {results['processing_time']:.2f}s")
         else:
-            print(f"\n❌ Conversion failed!")
-            print(f"  Input: {results['file']}")
+            click.echo(f"\n❌ Conversion failed!")
+            click.echo(f"  Input: {results['file']}")
             for error in results['errors']:
-                print(f"  Error: {error}")
+                click.echo(f"  Error: {error}")
         
         # Show warnings if any
-        if results['warnings'] and args.verbose:
-            print(f"  Warnings:")
+        if results['warnings'] and verbose:
+            click.echo(f"  Warnings:")
             for warning in results['warnings']:
-                print(f"    ⚠️  {warning}")
+                click.echo(f"    ⚠️  {warning}")
+
+
+@click.group()
+@click.version_option(version=get_version(), prog_name="Resume Automation Tool")
+def cli():
+    """Resume Automation Tool - Convert markdown resumes to multiple formats.
+    
+    This tool provides a comprehensive CLI for converting markdown resumes
+    to PDF, HTML, and DOCX formats with ATS optimization.
+    
+    Examples:
+        # Convert single resume with default PDF format
+        resume-convert convert resume.md
+        
+        # Convert to specific formats
+        resume-convert convert resume.md --format html --format pdf
+        
+        # Batch convert multiple resumes
+        resume-convert batch *.md --output-dir outputs/
+        
+        # List available formats
+        resume-convert list-formats
+    """
+    pass
+
+
+@cli.command()
+@click.argument('input_file', type=click.Path(exists=True, dir_okay=False, path_type=Path))
+@click.option('--format', '-f', 'formats', multiple=True, 
+              type=click.Choice(['pdf', 'html', 'docx'], case_sensitive=False),
+              default=['pdf'], show_default=True,
+              help='Output format(s) to generate. PDF is prioritized as default per Issue #23.')
+@click.option('--output-dir', '-o', type=click.Path(path_type=Path),
+              help='Output directory for generated files (default: ./output)')
+@click.option('--config', '-c', type=click.Path(exists=True, dir_okay=False, path_type=Path),
+              help='Path to configuration file (YAML format)')
+@click.option('--config-override', multiple=True,
+              help='Override configuration values (e.g., --config-override ats_rules.max_line_length=85)')
+@click.option('--no-validation', is_flag=True,
+              help='Skip output validation')
+@click.option('--verbose', '-v', is_flag=True,
+              help='Enable verbose output')
+@click.option('--quiet', '-q', is_flag=True,
+              help='Suppress all output except errors')
+@click.option('--json-output', is_flag=True,
+              help='Output results in JSON format')
+def convert(input_file: Path, formats: List[str], output_dir: Optional[Path], config: Optional[Path],
+            config_override: List[str], no_validation: bool, verbose: bool, quiet: bool, json_output: bool):
+    """Convert a single resume file to specified format(s).
+    
+    This command converts a single markdown resume file to one or more output formats.
+    By default, PDF format is generated as it is the most commonly requested format
+    for ATS systems.
+    
+    Examples:
+        # Convert to default PDF format
+        resume-convert convert resume.md
+        
+        # Convert to multiple formats
+        resume-convert convert resume.md --format pdf --format html
+        
+        # Convert with custom configuration
+        resume-convert convert resume.md --config my_config.yaml
+        
+        # Convert with output directory
+        resume-convert convert resume.md --output-dir /path/to/output
+    """
+    # Validate mutually exclusive options
+    if verbose and quiet:
+        raise click.ClickException("Cannot use --verbose and --quiet together")
+    
+    # Set up progress reporter
+    progress_reporter = CLIProgressReporter(verbose=verbose, quiet=quiet)
+    
+    try:
+        # Convert the file
+        result = convert_single_file(
+            input_file=str(input_file),
+            output_dir=str(output_dir) if output_dir else None,
+            formats=list(formats),
+            config_path=str(config) if config else None,
+            config_overrides=list(config_override) if config_override else None,
+            no_validation=no_validation,
+            progress_reporter=progress_reporter
+        )
+        
+        # Print results
+        if not quiet:
+            print_results(result, json_output=json_output, verbose=verbose)
+        
+        # Exit with appropriate code
+        if result.get('success', False):
+            sys.exit(0)
+        else:
+            sys.exit(1)
+            
+    except Exception as e:
+        if json_output:
+            error_result = {
+                "success": False,
+                "file": str(input_file),
+                "errors": [str(e)],
+                "output_files": [],
+                "processing_time": 0.0
+            }
+            print(json.dumps(error_result, indent=2))
+        else:
+            click.echo(f"❌ Conversion failed: {e}", err=True)
+        sys.exit(1)
+
+
+@cli.command()
+@click.argument('input_files', nargs=-1, required=True, type=click.Path(exists=True, dir_okay=False, path_type=Path))
+@click.option('--format', '-f', 'formats', multiple=True, 
+              type=click.Choice(['pdf', 'html', 'docx'], case_sensitive=False),
+              default=['pdf'], show_default=True,
+              help='Output format(s) to generate. PDF is prioritized as default per Issue #23.')
+@click.option('--output-dir', '-o', type=click.Path(path_type=Path),
+              help='Output directory for generated files (default: ./output)')
+@click.option('--config', '-c', type=click.Path(exists=True, dir_okay=False, path_type=Path),
+              help='Path to configuration file (YAML format)')
+@click.option('--config-override', multiple=True,
+              help='Override configuration values (e.g., --config-override ats_rules.max_line_length=85)')
+@click.option('--workers', '-w', type=int, default=None,
+              help='Number of worker threads for batch processing (default: auto-detect)')
+@click.option('--no-validation', is_flag=True,
+              help='Skip output validation')
+@click.option('--verbose', '-v', is_flag=True,
+              help='Enable verbose output')
+@click.option('--quiet', '-q', is_flag=True,
+              help='Suppress all output except errors')
+@click.option('--json-output', is_flag=True,
+              help='Output results in JSON format')
+def batch(input_files: tuple[Path, ...], formats: List[str], output_dir: Optional[Path], config: Optional[Path],
+          config_override: List[str], workers: Optional[int], no_validation: bool, 
+          verbose: bool, quiet: bool, json_output: bool):
+    """Convert multiple resume files in batch.
+    
+    This command processes multiple markdown resume files simultaneously using
+    parallel processing for improved performance. It's ideal for converting
+    multiple resumes at once with consistent settings.
+    
+    Examples:
+        # Batch convert all markdown files in current directory
+        resume-convert batch *.md
+        
+        # Batch convert with specific output directory
+        resume-convert batch *.md --output-dir outputs/
+        
+        # Batch convert with custom worker count
+        resume-convert batch *.md --workers 4
+        
+        # Batch convert multiple specific files
+        resume-convert batch resume1.md resume2.md resume3.md
+    """
+    # Validate mutually exclusive options
+    if verbose and quiet:
+        raise click.ClickException("Cannot use --verbose and --quiet together")
+    
+    if len(input_files) == 0:
+        raise click.ClickException("No input files specified")
+    
+    # Convert tuple to list and validate files
+    file_list = []
+    for file_path in input_files:
+        if file_path.suffix.lower() not in ['.md', '.markdown']:
+            click.echo(f"⚠️  Warning: File does not have .md extension: {file_path}", err=True)
+        file_list.append(str(file_path))
+    
+    # Set up progress reporter
+    progress_reporter = CLIProgressReporter(verbose=verbose, quiet=quiet)
+    
+    try:
+        # Convert files in batch
+        result = convert_batch(
+            input_files=file_list,
+            output_dir=str(output_dir) if output_dir else None,
+            formats=list(formats),
+            config_path=str(config) if config else None,
+            config_overrides=list(config_override) if config_override else None,
+            no_validation=no_validation,
+            workers=workers,
+            progress_reporter=progress_reporter
+        )
+        
+        # Print results
+        if not quiet:
+            print_results(result, json_output=json_output, verbose=verbose)
+        
+        # Exit with appropriate code - successful if any files were processed
+        if result.get('successful_files', 0) > 0:
+            sys.exit(0)
+        else:
+            sys.exit(1)
+            
+    except Exception as e:
+        if json_output:
+            error_result = {
+                "success": False,
+                "total_files": len(file_list),
+                "successful_files": 0,
+                "failed_files": len(file_list),
+                "errors": [str(e)],
+                "results": []
+            }
+            print(json.dumps(error_result, indent=2))
+        else:
+            click.echo(f"❌ Batch conversion failed: {e}", err=True)
+        sys.exit(1)
+
+
+@cli.command(name='list-formats')
+def list_formats():
+    """List all available output formats.
+    
+    This command displays all supported output formats that can be used
+    with the convert and batch commands.
+    """
+    try:
+        converter = get_converter()
+        formats = converter.get_supported_formats()
+        
+        click.echo("Available output formats:")
+        for fmt in formats:
+            click.echo(f"  • {fmt}")
+        
+    except Exception as e:
+        click.echo(f"❌ Error listing formats: {e}", err=True)
+        sys.exit(1)
+
+
+@cli.command(name='list-themes')
+def list_themes():
+    """List all available themes for output formatting.
+    
+    This command displays all available themes that can be used
+    to customize the appearance of generated resumes.
+    """
+    try:
+        converter = get_converter()
+        themes = converter.get_available_themes()
+        
+        click.echo("Available themes:")
+        if isinstance(themes, dict):
+            for format_type, theme_list in themes.items():
+                click.echo(f"  {format_type.upper()}:")
+                for theme in theme_list:
+                    click.echo(f"    • {theme}")
+        else:
+            for theme in themes:
+                click.echo(f"  • {theme}")
+        
+    except Exception as e:
+        click.echo(f"❌ Error listing themes: {e}", err=True)
+        sys.exit(1)
+
+
+@cli.command(name='validate-config')
+@click.argument('config_file', type=click.Path(exists=True, dir_okay=False, path_type=Path))
+@click.option('--verbose', '-v', is_flag=True, help='Show detailed configuration summary')
+def validate_config(config_file: Path, verbose: bool):
+    """Validate a configuration file.
+    
+    This command validates the syntax and content of a YAML configuration file
+    to ensure it can be used with the convert and batch commands.
+    
+    Examples:
+        # Validate configuration file
+        resume-convert validate-config config.yaml
+        
+        # Validate with detailed output
+        resume-convert validate-config config.yaml --verbose
+    """
+    try:
+        validate_config_content(str(config_file))
+        
+        if verbose:
+            # Show additional details if verbose
+            from .converter.config_manager import ConverterConfigManager
+            config_manager = ConverterConfigManager(str(config_file))
+            summary = config_manager.get_config_summary()
+            
+            click.echo("\nDetailed configuration summary:")
+            for key, value in summary.items():
+                click.echo(f"  {key}: {value}")
+        
+    except Exception as e:
+        click.echo(f"❌ Configuration validation failed: {e}", err=True)
+        sys.exit(1)
 
 
 def main() -> None:
     """Main CLI entry point."""
     try:
-        # Parse arguments
-        parser = create_parser()
-        args = parser.parse_args()
-        
-        # Handle utility commands
-        if handle_utility_commands(args):
-            return
-        
-        # Validate arguments
-        validate_arguments(args)
-        
-        # Set up progress reporter
-        progress_reporter = CLIProgressReporter(
-            verbose=args.verbose,
-            quiet=args.quiet
-        )
-        
-        # Convert files
-        if args.batch or len(args.input_files) > 1:
-            results = convert_batch(args.input_files, args, progress_reporter)
-        else:
-            results = convert_single_file(args.input_files[0], args, progress_reporter)
-        
-        # Print results
-        print_results(results, args)
-        
-        # Exit with appropriate code
-        if results.get('success', True) or results.get('successful_files', 0) > 0:
-            sys.exit(0)
-        else:
-            sys.exit(1)
-            
+        cli()
     except KeyboardInterrupt:
         print("\n⏹️  Conversion cancelled by user", file=sys.stderr)
         sys.exit(1)
-    
     except Exception as e:
         print(f"❌ Unexpected error: {e}", file=sys.stderr)
         sys.exit(1)

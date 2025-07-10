@@ -1,12 +1,131 @@
 {
-  "current_version": "0.1.0-alpha.3",
+  "current_version": "0.1.0-alpha.4",
   "version_type": "alpha",
   "major": 0,
   "minor": 1,
   "patch": 0,
-  "alpha": 3,
+  "alpha": 4,
   "beta": 0,
   "history": [
+    {
+      "version": "0.1.0-alpha.4",
+      "message": "chore: enhance system diagnostics, config validation, and quality metrics\n\n- Added detailed system info and dependency checks, including optional psutil support.\n- Implemented environment validation to detect Python version and missing dependencies.\n- Expanded configuration validation with schema checks, business rules, and schema summaries.\n- Improved config utilities with sample config generation, validation, and summaries.\n- Refined quality validator to perform comprehensive file assessments: format, ATS compliance, content, and formatting scores, issues, warnings, and recommendations. Supports detailed analysis and export capabilities.\n- Updated types to include validation metrics, validation reports, and processing stages.\n- Enhanced utilities for format/theme discovery, validation, and diagnostics with proper error handling.\n- Cleaned up code structure, added docstrings,",
+      "timestamp": "2025-07-10T07:29:12.944011+00:00",
+      "category": "Added",
+      "files_changed": [
+        {
+          "Modified": ".git-simplifier/git-simplifier.toml"
+        },
+        {
+          "Modified": "README.md"
+        },
+        {
+          "Modified": "pyproject.toml"
+        },
+        {
+          "Modified": "src/cli.py"
+        },
+        {
+          "Modified": "src/converter/__init__.py"
+        },
+        {
+          "Modified": "src/converter/batch_processor.py"
+        },
+        {
+          "Modified": "src/converter/config_manager.py"
+        },
+        {
+          "Modified": "src/converter/error_handler.py"
+        },
+        {
+          "Modified": "src/converter/exceptions.py"
+        },
+        {
+          "Modified": "src/converter/file_manager.py"
+        },
+        {
+          "Modified": "src/converter/progress_tracker.py"
+        },
+        {
+          "Modified": "src/converter/quality_validator.py"
+        },
+        {
+          "Modified": "src/converter/resume_converter.py"
+        },
+        {
+          "Modified": "src/converter/tests/__init__.py"
+        },
+        {
+          "Modified": "src/converter/tests/test_integration.py"
+        },
+        {
+          "Modified": "src/converter/types.py"
+        },
+        {
+          "Modified": "src/converter/utilities.py"
+        },
+        {
+          "Modified": "uv.lock"
+        },
+        {
+          "Untracked": ".git_simplifier_backups/backup_20250710_002908.json"
+        },
+        {
+          "Untracked": "SPEC_PRP/PRPs/issue-23-cli-interface-development.md"
+        },
+        {
+          "Untracked": "docs/IMPLEMENTATION_PLAN_ISSUE_22.md"
+        },
+        {
+          "Untracked": "docs/converter.md"
+        },
+        {
+          "Untracked": "src/converter/tests/test_batch_processor.py"
+        },
+        {
+          "Untracked": "src/converter/tests/test_config_manager.py"
+        },
+        {
+          "Untracked": "src/converter/tests/test_error_handler.py"
+        },
+        {
+          "Untracked": "src/converter/tests/test_file_manager.py"
+        },
+        {
+          "Untracked": "src/converter/tests/test_progress_tracker.py"
+        },
+        {
+          "Untracked": "src/converter/tests/test_quality_validator.py"
+        },
+        {
+          "Untracked": "src/converter/tests/test_resume_converter.py"
+        },
+        {
+          "Untracked": "src/converter/tests/test_types.py"
+        },
+        {
+          "Untracked": "src/converter/tests/test_utilities.py"
+        },
+        {
+          "Untracked": "test_resume.md"
+        },
+        {
+          "Untracked": "transcripts/ai/current_transcription.md"
+        },
+        {
+          "Untracked": "transcripts/ai/transcription_07-09-2025_19-39-54.md"
+        },
+        {
+          "Untracked": "transcripts/history.json"
+        },
+        {
+          "Untracked": "transcripts/normal/current_transcription.txt"
+        },
+        {
+          "Untracked": "transcripts/normal/transcription_07-09-2025_19-39-54.txt"
+        }
+      ]
+    },
     {
       "version": "0.1.0-alpha.3",
       "message": "finished phase 1",
