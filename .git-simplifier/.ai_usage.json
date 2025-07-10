@@ -1,12 +1,12 @@
 {
-  "total_requests": 1,
-  "total_tokens": 56524,
-  "total_cost_estimate": 0.0056524,
-  "daily_requests": 1,
-  "daily_tokens": 56524,
-  "daily_cost_estimate": 0.0056524,
+  "total_requests": 2,
+  "total_tokens": 68522,
+  "total_cost_estimate": 0.0068522,
+  "daily_requests": 2,
+  "daily_tokens": 68522,
+  "daily_cost_estimate": 0.0068522,
   "last_reset_date": "2025-07-10",
-  "last_request_cost": 0.0056524,
-  "last_request_tokens": 56524,
+  "last_request_cost": 0.0011998,
+  "last_request_tokens": 11998,
   "last_request_model": "gpt-4.1-nano"
 }

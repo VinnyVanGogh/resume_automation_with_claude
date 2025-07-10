@@ -1,5 +1,12 @@
 [
   {
+    "timestamp": "2025-07-10T08:40:42.662173",
+    "text": "You can fix what's wrong with the test, but what I really need you to do is make it so we can run with full coverage for everything from the root directory like we were able to before you made the per...",
+    "model": "base",
+    "txt_file": "transcripts/normal/current_transcription.txt",
+    "md_file": "transcripts/ai/current_transcription.md"
+  },
+  {
     "timestamp": "2025-07-09T23:51:06.677611",
     "text": "Now that we completed issue 22 let's work on a plan for issue 23. We need to create the CLI interface. I think we did already do some of that in the past. We should use click for this. I do prefer tha...",
     "model": "base",

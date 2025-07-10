@@ -1,47 +1,45 @@
-# Issue 23: CLI Interface Development
+# Task Overview
 
-## Overview
-The goal is to create a command-line interface (CLI) for the project, focusing on file conversion functionalities. This will involve leveraging the `click` library for ease of use and better help documentation.
+The main goal is to restore and enhance the current testing setup to ensure comprehensive coverage and accurate reporting.
 
-## Tasks and Requirements
+---
 
-### 1. Use of `click` Library
-- Prefer `click` over `argparse` for CLI implementation.
-- Ensure detailed help messages are available for each command.
+## Objectives
 
-### 2. Commands to Implement
-- **Single File Conversion**
-- **Batch Processing**
+### 1. Fix Existing Test Issues
+- Address and resolve any problems with the current test suite.
 
-### 3. Format Options
-- Support for multiple formats:
-  - PDF (priority, default for resumes)
-  - HTML
-  - Others as needed
+### 2. Enable Full Coverage Testing
+- Configure the tests to run from the root directory, similar to the setup before the performance test was added.
+- Ensure that all parts of the application are tested, providing full coverage.
 
-### 4. Configuration Options
-- Option to specify a configuration file.
-- Option to specify configuration directly as JSON.
+### 3. Improve Coverage Reporting
+- Use the **Cove** report to:
+  - Identify missing HTML coverage.
+  - Ensure the "HTML Fail" metric is under 90%.
+  - Verify the source coverage.
 
-### 5. Output Options
-- Specify output directory.
+### 4. Achieve 90% or Higher Coverage
+- Confirm that the entire application has at least 90% test coverage.
+- If coverage is below 90%, identify gaps and improve tests accordingly.
 
-### 6. Mode Flags
-- Verbose mode
-- Quiet mode
+---
 
-### 7. Additional Features
-- Version information:
-  - Should be accessible via a command or flag.
-  - Version info must be synchronized with the `pyproject.toml` file.
-- Detailed command help (click handles most of this).
-- Clear docstrings for each command in the command group.
+## Action Items
 
-## Next Steps
-- Review **Issue 22** to ensure current progress aligns with the plan.
-- Review **Issue 24** related to configuration integration in Geo.
-  - Determine if Issue 24 is redundant; consider closing it if so.
+- [ ] Fix issues with the current test suite.
+- [ ] Configure tests to run from the root directory.
+- [ ] Ensure coverage reports are generated and accurate.
+- [ ] Verify that the "HTML Fail" metric is below 90%.
+- [ ] Validate overall source coverage is ≥ 90%.
+- [ ] Remove or adjust any barriers preventing full coverage testing.
+
+---
 
 ## Notes
-- Prioritize PDF format due to its importance for resumes.
-- Ensure all options and commands are well-documented for user clarity.
+- It is crucial that the testing process is reliable and comprehensive.
+- The goal is to facilitate effective verification and validation without redundant or ineffective tests.
+
+---
+
+**End of Document**
