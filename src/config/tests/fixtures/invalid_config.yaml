@@ -1,0 +1,48 @@
+# Invalid test configuration for error testing
+version: "1.0"
+created_by: "test-suite"
+
+ats_rules:
+  max_line_length: -10  # Invalid: negative value
+  bullet_style: "☆"     # Invalid: not ATS-friendly
+  section_order: []     # Invalid: empty list
+  optimize_keywords: "yes"  # Invalid: should be boolean
+  remove_special_chars: true
+
+output_formats:
+  enabled_formats:
+    - "xml"             # Invalid: unsupported format
+    - "pdf"
+  html_theme: "rainbow" # Invalid: unsupported theme
+  pdf_page_size: "Tabloid"  # Invalid: unsupported size
+  pdf_margins:
+    top: -0.5          # Invalid: negative margin
+    bottom: 0.5
+    left: 0.5
+    right: 0.5
+  output_directory: "/invalid/path/that/does/not/exist"
+  filename_prefix: ""   # Invalid: empty string
+
+styling:
+  font_family: "Comic Sans MS"  # Warning: not ATS-friendly
+  font_size: 50         # Invalid: too large
+  font_weight: "ultra-bold"  # Invalid: unsupported weight
+  theme: "neon"         # Invalid: unsupported theme
+  color_scheme:
+    primary: "red"      # Invalid: not hex format
+    secondary: "#gggggg"  # Invalid: invalid hex
+    accent: "#0066cc"
+    background: "#ffffff"
+  section_spacing: -5   # Invalid: negative spacing
+  line_height: 0.2      # Invalid: too small
+
+processing:
+  batch_size: 0         # Invalid: must be at least 1
+  max_workers: -1       # Invalid: must be positive
+  timeout_seconds: 5    # Warning: too short
+  validate_input: "maybe"  # Invalid: should be boolean
+
+logging:
+  level: "TRACE"        # Invalid: unsupported level
+  file_path: 123        # Invalid: should be string
+  max_file_size: "large"  # Invalid: should be integer

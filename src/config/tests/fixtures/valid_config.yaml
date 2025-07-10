@@ -1,0 +1,77 @@
+# Valid test configuration for testing
+version: "1.0"
+created_by: "test-suite"
+
+ats_rules:
+  max_line_length: 75
+  bullet_style: "-"
+  section_order:
+    - "contact"
+    - "summary"
+    - "experience"
+    - "skills"
+    - "education"
+  optimize_keywords: true
+  remove_special_chars: true
+  keyword_emphasis_bold: true
+  keyword_emphasis_caps: false
+  keyword_density_target: 0.025
+  skill_prioritization: true
+
+output_formats:
+  enabled_formats:
+    - "html"
+    - "pdf"
+  html_theme: "modern"
+  html_include_styles: true
+  html_meta_description: "Test resume"
+  pdf_page_size: "A4"
+  pdf_optimize_size: true
+  pdf_margins:
+    top: 1.0
+    bottom: 1.0
+    left: 0.8
+    right: 0.8
+  docx_template: "modern"
+  docx_line_spacing: 1.2
+  docx_margins:
+    top: 1.0
+    bottom: 1.0
+    left: 0.8
+    right: 0.8
+  output_directory: "test_output"
+  filename_prefix: "test_resume"
+  overwrite_existing: true
+
+styling:
+  font_family: "Helvetica"
+  font_size: 12
+  font_weight: "normal"
+  theme: "modern"
+  color_scheme:
+    primary: "#333333"
+    secondary: "#666666"
+    accent: "#0077be"
+    background: "#ffffff"
+  section_spacing: 14
+  line_height: 1.2
+  paragraph_spacing: 8
+  layout_style: "single_column"
+  header_style: "centered"
+
+processing:
+  batch_size: 5
+  max_workers: 2
+  timeout_seconds: 180
+  validate_input: true
+  validate_output: true
+  strict_validation: false
+  cache_templates: true
+  optimize_images: true
+
+logging:
+  level: "DEBUG"
+  format: "%(asctime)s - %(levelname)s - %(message)s"
+  file_path: "test.log"
+  max_file_size: 5242880  # 5MB
+  backup_count: 2
